@@ -4,7 +4,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Promo Tracker — les promos jeux vidéo, toutes plateformes",
-  description: "Suis les promos jeux vidéo sur PC, PlayStation, Xbox et Nintendo Switch. Wishlist et alertes de prix.",
+  description:
+    "Suis les prix et promos jeux vidéo sur Steam, PlayStation, Xbox, Nintendo eShop, Epic et GOG. Historique, wishlist et alertes de prix.",
 };
 
 export const viewport: Viewport = {
@@ -27,8 +28,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Les achats se font uniquement sur les boutiques officielles.
           </p>
           <p>
-            Données : CheapShark, Epic Games Store, Nintendo eShop et la communauté. Prix indicatifs, vérifie sur la
-            boutique avant d&apos;acheter.
+            Données : Steam, PlayStation Store, Xbox Store, Nintendo eShop, Epic Games Store, GOG, CheapShark et la
+            communauté. Prix indicatifs relevés chaque jour, vérifie sur la boutique avant d&apos;acheter.
           </p>
         </footer>
       </body>

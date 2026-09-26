@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DealForm } from "@/components/DealForm";
+import { NoTransactionNotice } from "@/components/NoTransactionNotice";
 
 export const metadata: Metadata = { title: "Proposer une promo — Promo Tracker" };
 
@@ -13,6 +14,7 @@ export default function NewDealPage() {
         </p>
       </div>
       <DealForm />
+      <NoTransactionNotice compact />
     </div>
   );
 }

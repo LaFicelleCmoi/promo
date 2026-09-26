@@ -20,9 +20,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen">
         <Header />
         <main className="mx-auto max-w-7xl px-4 py-5 sm:py-8">{children}</main>
-        <footer className="mx-auto max-w-7xl px-4 pb-[max(2.5rem,env(safe-area-inset-bottom))] text-xs text-muted">
-          Données : CheapShark, Epic Games Store, Nintendo eShop et la communauté. Prix indicatifs, vérifie sur la
-          boutique avant d&apos;acheter.
+        <footer className="mx-auto max-w-7xl space-y-2 border-t border-border px-4 pt-6 pb-[max(2.5rem,env(safe-area-inset-bottom))] text-xs text-muted">
+          <p>
+            <strong className="text-slate-300">Aucune transaction sur ce site.</strong> Promo Tracker est un comparateur
+            de promos : rien n&apos;est vendu ici et aucun paiement ni coordonnée bancaire ne t&apos;est jamais demandé.
+            Les achats se font uniquement sur les boutiques officielles.
+          </p>
+          <p>
+            Données : CheapShark, Epic Games Store, Nintendo eShop et la communauté. Prix indicatifs, vérifie sur la
+            boutique avant d&apos;acheter.
+          </p>
         </footer>
       </body>
     </html>

@@ -9,6 +9,7 @@ export type FilterValues = {
   min?: string;
   max?: string;
   free?: string;
+  low?: string;
   sort?: string;
   page?: string;
 };
@@ -33,7 +34,7 @@ export function hrefWith(values: FilterValues, patch: Partial<FilterValues>) {
 
 export function Filters({ values, stores, platformCounts }: Props) {
   const total = Object.values(platformCounts).reduce((a, b) => a + b, 0);
-  const activeCount = [values.q, values.store, values.min, values.max, values.free].filter(Boolean).length;
+  const activeCount = [values.q, values.store, values.min, values.max, values.free, values.low].filter(Boolean).length;
 
   return (
     <div className="space-y-4">
@@ -108,10 +109,16 @@ export function Filters({ values, stores, platformCounts }: Props) {
         </div>
 
         <div className="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between lg:col-span-6">
-          <label className="flex items-center gap-2 text-sm text-slate-300">
-            <input type="checkbox" name="free" value="1" defaultChecked={values.free === "1"} className="accent-accent" />
-            Uniquement les jeux gratuits
-          </label>
+          <div className="flex flex-col gap-2 sm:flex-row sm:gap-5">
+            <label className="flex items-center gap-2 text-sm text-slate-300">
+              <input type="checkbox" name="free" value="1" defaultChecked={values.free === "1"} className="accent-accent" />
+              Uniquement les jeux gratuits
+            </label>
+            <label className="flex items-center gap-2 text-sm text-slate-300">
+              <input type="checkbox" name="low" value="1" defaultChecked={values.low === "1"} className="accent-accent" />
+              Uniquement au plus bas prix
+            </label>
+          </div>
           <div className="grid grid-cols-2 gap-2 sm:flex">
             <Link href={values.platform ? `/?platform=${values.platform}` : "/"} className="btn-ghost">
               Réinitialiser

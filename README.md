@@ -77,6 +77,10 @@ prix observé**, et un badge **« Plus bas prix »** apparaît quand le prix act
 
 ## Emails
 
+> **Inscription sans email** : par défaut, le compte est créé côté serveur déjà confirmé
+> (`REQUIRE_EMAIL_CONFIRMATION` absent ou `false`). L'inscription fonctionne donc avec n'importe quelle adresse,
+> même sans service d'email. Mets `REQUIRE_EMAIL_CONFIRMATION=true` pour exiger la confirmation par email.
+
 Deux envois d'emails : la **confirmation d'inscription** (envoyée par Supabase Auth) et les **alertes de wishlist**
 (envoyées par `/api/sync`). Les deux passent par le même compte.
 

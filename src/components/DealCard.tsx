@@ -9,6 +9,10 @@ export function DealCard({ deal, userId }: Props) {
   const sale = formatPrice(deal.sale_price, deal.currency);
   const normal = deal.normal_price && deal.normal_price > deal.sale_price ? formatPrice(deal.normal_price, deal.currency) : null;
   const timeLeft = formatTimeLeft(deal.ends_at);
+  const lowest =
+    deal.tracked_days >= 3 && deal.lowest_price !== null && deal.lowest_price < deal.sale_price
+      ? formatPrice(deal.lowest_price, deal.currency)
+      : null;
   const isOwner = deal.source === "community" && userId && deal.created_by === userId;
 
   return (
@@ -29,6 +33,11 @@ export function DealCard({ deal, userId }: Props) {
         {deal.discount > 0 && (
           <span className="absolute top-2 left-2 rounded-md bg-deal px-1.5 py-0.5 text-xs font-black text-black sm:px-2 sm:text-sm">
             -{deal.discount}%
+          </span>
+        )}
+        {deal.is_lowest && deal.sale_price > 0 && (
+          <span className="absolute bottom-2 left-2 rounded-md bg-amber-400 px-1.5 py-0.5 text-[10px] font-bold text-black sm:px-2 sm:text-xs">
+            Plus bas prix
           </span>
         )}
         {deal.sale_price === 0 && (
@@ -60,6 +69,12 @@ export function DealCard({ deal, userId }: Props) {
           </div>
           {timeLeft && <span className="text-[11px] text-amber-400 sm:text-xs">{timeLeft}</span>}
         </div>
+
+        {lowest && (
+          <p className="text-[11px] text-muted sm:text-xs" title={`Suivi depuis ${deal.tracked_days} jours`}>
+            Plus bas observé : <span className="text-slate-300">{lowest}</span>
+          </p>
+        )}
 
         <a
           href={deal.url}

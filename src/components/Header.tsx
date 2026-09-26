@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { getUser } from "@/lib/supabase/server";
 import { logout } from "@/app/auth/actions";
 import { MobileMenu } from "@/components/MobileMenu";
+import { NavLinks } from "@/components/NavLinks";
 import StarBorder from "@/components/reactbits/StarBorder";
 
 export async function Header() {
@@ -22,16 +24,20 @@ export async function Header() {
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-bg/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 lg:gap-6">
-        <Link href="/" className="shrink-0 text-lg font-black tracking-tight">
+        <Link href="/" aria-label="Promo Tracker — accueil" className="shrink-0 text-lg font-black tracking-tight">
           <span className="text-accent">Promo</span>Tracker
         </Link>
 
-        <nav className="hidden flex-1 items-center gap-4 text-sm text-muted md:flex">
-          {links.map((l) => (
-            <Link key={l.href} href={l.href} className="whitespace-nowrap hover:text-white">
-              {l.label}
-            </Link>
-          ))}
+        <nav aria-label="Menu principal" className="hidden flex-1 gap-5 self-stretch text-sm text-muted md:flex">
+          <Suspense
+            fallback={links.map((l) => (
+              <Link key={l.href} href={l.href} className="flex items-center whitespace-nowrap hover:text-white">
+                {l.label}
+              </Link>
+            ))}
+          >
+            <NavLinks links={links} />
+          </Suspense>
         </nav>
 
         <div className="ml-auto hidden items-center gap-3 md:flex">
@@ -60,7 +66,9 @@ export async function Header() {
               Inscription
             </Link>
           )}
-          <MobileMenu links={links} userName={name} />
+          <Suspense>
+            <MobileMenu links={links} userName={name} />
+          </Suspense>
         </div>
       </div>
     </header>

@@ -61,6 +61,7 @@ export function DealCard({ deal, userId }: Props) {
             <form action={addToWishlist} className="flex-1">
               <input type="hidden" name="title" value={deal.title} />
               <input type="hidden" name="platform" value={deal.platform} />
+              <input type="hidden" name="notify" value="1" />
               <button className="w-full text-left text-xs text-muted hover:text-accent">+ Ajouter à ma wishlist</button>
             </form>
             {isOwner && (

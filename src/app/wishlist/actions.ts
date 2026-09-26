@@ -25,6 +25,7 @@ async function insertItem(formData: FormData): Promise<string | null> {
     title,
     platform: isPlatform(platform) ? platform : null,
     target_price: target,
+    notify: formData.get("notify") !== null,
   });
 
   if (error?.code === "23505") return "Ce jeu est déjà dans ta wishlist.";
@@ -43,6 +44,14 @@ export async function createWishlistItem(_prev: WishlistFormState, formData: For
 /** Bouton « Ajouter à ma wishlist » sur une carte promo. */
 export async function addToWishlist(formData: FormData) {
   await insertItem(formData);
+}
+
+export async function toggleWishlistNotify(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  const notify = formData.get("notify") === "true";
+  const supabase = await createClient();
+  await supabase.from("wishlist").update({ notify }).eq("id", id);
+  revalidatePath("/wishlist");
 }
 
 export async function removeFromWishlist(formData: FormData) {

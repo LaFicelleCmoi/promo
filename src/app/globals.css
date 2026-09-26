@@ -11,6 +11,7 @@
   --color-deal: #22c55e;
   --color-danger: #ef4444;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --breakpoint-xs: 22rem;
 }
 
 @layer base {
@@ -19,11 +20,12 @@
   }
   body {
     @apply bg-bg text-slate-100 antialiased;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
 @utility input {
-  @apply w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm text-slate-100 outline-none transition placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/30;
+  @apply w-full rounded-lg border border-border bg-surface-2 px-3 py-2.5 text-base text-slate-100 sm:py-2 sm:text-sm outline-none transition placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/30;
 }
 
 @utility label {
@@ -44,4 +46,11 @@
 
 @utility card {
   @apply rounded-xl border border-border bg-surface;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

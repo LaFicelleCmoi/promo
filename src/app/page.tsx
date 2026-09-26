@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { DealCard } from "@/components/DealCard";
 import { Filters, hrefWith, type FilterValues } from "@/components/Filters";
 import { isPlatform, type Deal } from "@/lib/types";
+import { NoTransactionNotice } from "@/components/NoTransactionNotice";
 
 const PAGE_SIZE = 24;
 
@@ -69,6 +70,8 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
           PC, PlayStation, Xbox, Nintendo Switch : Steam, Epic, GOG, eShop et les bons plans partagés par la communauté.
         </p>
       </section>
+
+      <NoTransactionNotice />
 
       <Filters values={{ ...params, platform }} stores={stores} platformCounts={platformCounts} />
 

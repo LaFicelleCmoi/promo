@@ -27,7 +27,7 @@ export default async function WishlistPage() {
   const onSale = wishlist.filter((w) => dealsByItem.has(w.id)).length;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
         <h1 className="text-2xl font-bold">Ma wishlist</h1>
         <p className="mt-1 text-sm text-muted">
@@ -48,13 +48,13 @@ export default async function WishlistPage() {
       <WishlistForm />
 
       {wishlist.length === 0 ? (
-        <div className="card p-10 text-center text-muted">Ta wishlist est vide pour l&apos;instant.</div>
+        <div className="card p-6 text-center text-muted sm:p-10">Ta wishlist est vide pour l&apos;instant.</div>
       ) : (
         <div className="space-y-6">
           {wishlist.map((item) => {
             const deals = dealsByItem.get(item.id) ?? [];
             return (
-              <section key={item.id} className="card p-4">
+              <section key={item.id} className="card p-3 sm:p-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex flex-wrap items-center gap-2">
                     <h2 className="font-semibold">{item.title}</h2>
@@ -74,7 +74,7 @@ export default async function WishlistPage() {
                       <span className="text-[11px] text-muted">Pas de promo pour le moment</span>
                     )}
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex w-full items-center justify-between gap-4 sm:w-auto sm:justify-end">
                     <form action={toggleWishlistNotify}>
                       <input type="hidden" name="id" value={item.id} />
                       <input type="hidden" name="notify" value={String(!item.notify)} />
@@ -90,7 +90,7 @@ export default async function WishlistPage() {
                 </div>
 
                 {deals.length > 0 && (
-                  <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  <div className="mt-3 grid gap-3 xs:grid-cols-2 sm:mt-4 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
                     {deals.slice(0, 8).map((deal) => (
                       <DealCard key={deal.id} deal={deal} />
                     ))}

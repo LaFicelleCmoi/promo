@@ -10,7 +10,7 @@ export const PLATFORM_LABELS: Record<Platform, string> = {
   other: "Autre",
 };
 
-export type DealSource = "cheapshark" | "epic" | "nintendo" | "community";
+export type DealSource = "steam" | "playstation" | "xbox" | "nintendo" | "epic" | "gog" | "cheapshark" | "community";
 
 export type Deal = {
   id: string;
@@ -26,6 +26,9 @@ export type Deal = {
   discount: number;
   currency: string;
   ends_at: string | null;
+  lowest_price: number | null;
+  tracked_days: number;
+  is_lowest: boolean;
   created_by: string | null;
   created_at: string;
   last_seen_at: string;

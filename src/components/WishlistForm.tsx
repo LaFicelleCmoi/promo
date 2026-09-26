@@ -39,7 +39,7 @@ export function WishlistForm() {
         </label>
         <input id="w-target" name="target_price" inputMode="decimal" placeholder="15" className="input" />
       </div>
-      <button type="submit" disabled={pending} className="btn-primary">
+      <button type="submit" disabled={pending} className="btn-primary py-3 sm:py-2">
         {pending ? "Ajout…" : "Ajouter"}
       </button>
       <label className="flex items-center gap-2 text-sm text-slate-300 sm:col-span-4">

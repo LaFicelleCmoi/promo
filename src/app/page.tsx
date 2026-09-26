@@ -29,7 +29,9 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
     .select("*", { count: "exact" })
     .or(`ends_at.is.null,ends_at.gt.${new Date().toISOString()}`);
 
-  if (params.q?.trim()) query = query.ilike("title", `%${escapeLike(params.q.trim())}%`);
+  // Chaque mot doit apparaître dans le titre, dans n'importe quel ordre (« star wars jedi » trouve « STAR WARS™ Jedi Bundle »).
+  const words = (params.q ?? "").trim().split(/\s+/).filter(Boolean).slice(0, 8);
+  for (const word of words) query = query.ilike("title", `%${escapeLike(word)}%`);
   if (platform) query = query.eq("platform", platform);
   if (params.store) query = query.eq("store", params.store);
   if (Number(params.min) > 0) query = query.gte("discount", Number(params.min));

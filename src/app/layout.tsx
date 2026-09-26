@@ -18,7 +18,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
-      <body className="min-h-screen">
+      <body className="min-h-screen overflow-x-clip">
         <Header />
         <main className="mx-auto max-w-7xl px-4 py-5 sm:py-8">{children}</main>
         <footer className="mx-auto max-w-7xl space-y-2 border-t border-border px-4 pt-6 pb-[max(2.5rem,env(safe-area-inset-bottom))] text-xs text-muted">

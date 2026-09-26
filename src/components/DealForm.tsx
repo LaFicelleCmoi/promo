@@ -8,7 +8,7 @@ export function DealForm() {
   const [state, action, pending] = useActionState<DealFormState, FormData>(createDeal, undefined);
 
   return (
-    <form action={action} className="card grid gap-4 p-6 sm:grid-cols-2">
+    <form action={action} className="card grid gap-4 p-4 sm:grid-cols-2 sm:p-6">
       <div className="sm:col-span-2">
         <label htmlFor="title" className="label">
           Jeu
@@ -78,7 +78,7 @@ export function DealForm() {
       )}
 
       <div className="sm:col-span-2">
-        <button type="submit" disabled={pending} className="btn-primary w-full sm:w-auto">
+        <button type="submit" disabled={pending} className="btn-primary w-full py-3 sm:w-auto sm:py-2">
           {pending ? "Publication…" : "Publier la promo"}
         </button>
       </div>

@@ -61,6 +61,20 @@ export function DealCard({ deal, userId }: Props) {
           {timeLeft && <span className="text-[11px] text-amber-400 sm:text-xs">{timeLeft}</span>}
         </div>
 
+        <a
+          href={deal.url}
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          title={`Ouvre ${deal.store} dans un nouvel onglet — aucun achat sur Promo Tracker`}
+          className="btn-ghost w-full min-w-0 gap-1 px-2 py-2 text-xs"
+        >
+          <span className="min-w-0 truncate">
+            <span className="sm:hidden">Voir l&apos;offre</span>
+            <span className="hidden sm:inline">Voir sur {deal.store}</span>
+          </span>
+          <span aria-hidden>↗</span>
+        </a>
+
         {userId && (
           <div className="flex gap-2 border-t border-border pt-2 sm:pt-3">
             <form action={addToWishlist} className="flex-1">

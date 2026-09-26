@@ -54,6 +54,7 @@ export type WishlistItem = {
   title: string;
   platform: Platform | null;
   target_price: number | null;
+  notify: boolean;
   created_at: string;
 };
 

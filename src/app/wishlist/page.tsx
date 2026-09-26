@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DealCard } from "@/components/DealCard";
 import { WishlistForm } from "@/components/WishlistForm";
-import { removeFromWishlist } from "./actions";
+import { removeFromWishlist, toggleWishlistNotify } from "./actions";
 import { PLATFORM_LABELS, type Deal, type WishlistItem } from "@/lib/types";
 import { formatPrice } from "@/lib/format";
 
@@ -32,7 +32,7 @@ export default async function WishlistPage() {
         <h1 className="text-2xl font-bold">Ma wishlist</h1>
         <p className="mt-1 text-sm text-muted">
           Ajoute les jeux que tu attends : dès qu&apos;une promo correspond (et passe sous ton prix cible), elle
-          apparaît ici.
+          apparaît ici et tu reçois un email.
           {wishlist.length > 0 && (
             <>
               {" "}
@@ -74,10 +74,19 @@ export default async function WishlistPage() {
                       <span className="text-[11px] text-muted">Pas de promo pour le moment</span>
                     )}
                   </div>
-                  <form action={removeFromWishlist}>
-                    <input type="hidden" name="id" value={item.id} />
-                    <button className="text-xs text-muted hover:text-danger">Retirer</button>
-                  </form>
+                  <div className="flex items-center gap-4">
+                    <form action={toggleWishlistNotify}>
+                      <input type="hidden" name="id" value={item.id} />
+                      <input type="hidden" name="notify" value={String(!item.notify)} />
+                      <button className={`text-xs ${item.notify ? "text-accent" : "text-muted"} hover:text-white`}>
+                        {item.notify ? "🔔 Alerte email active" : "🔕 Alerte email désactivée"}
+                      </button>
+                    </form>
+                    <form action={removeFromWishlist}>
+                      <input type="hidden" name="id" value={item.id} />
+                      <button className="text-xs text-muted hover:text-danger">Retirer</button>
+                    </form>
+                  </div>
                 </div>
 
                 {deals.length > 0 && (

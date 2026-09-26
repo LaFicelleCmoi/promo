@@ -35,6 +35,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
   if (Number(params.min) > 0) query = query.gte("discount", Number(params.min));
   if (params.max !== undefined && params.max !== "" && Number(params.max) >= 0) query = query.lte("sale_price", Number(params.max));
   if (params.free === "1") query = query.eq("sale_price", 0);
+  if (params.low === "1") query = query.eq("is_lowest", true);
 
   switch (params.sort) {
     case "price":
@@ -67,7 +68,8 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
           Toutes les promos jeux vidéo, <span className="text-accent">au même endroit</span>.
         </h1>
         <p className="mt-2 text-sm text-muted sm:text-base">
-          PC, PlayStation, Xbox, Nintendo Switch : Steam, Epic, GOG, eShop et les bons plans partagés par la communauté.
+          Les prix de Steam, PlayStation Store, Xbox Store, Nintendo eShop, Epic et GOG suivis chaque jour, avec
+          l&apos;historique du plus bas prix.
         </p>
       </section>
 

@@ -12,6 +12,39 @@
   --color-danger: #ef4444;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --breakpoint-xs: 22rem;
+
+  /* React Bits — StarBorder */
+  --animate-star-movement-bottom: star-movement-bottom linear infinite alternate;
+  --animate-star-movement-top: star-movement-top linear infinite alternate;
+
+  @keyframes star-movement-bottom {
+    0% {
+      transform: translate(0%, 0%);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-100%, 0%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes star-movement-top {
+    0% {
+      transform: translate(0%, 0%);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(100%, 0%);
+      opacity: 0;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-star-movement-bottom,
+  .animate-star-movement-top {
+    animation: none;
+  }
 }
 
 @layer base {

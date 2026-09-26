@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DealCard } from "@/components/DealCard";
 import { WishlistForm } from "@/components/WishlistForm";
+import { NoTransactionNotice } from "@/components/NoTransactionNotice";
 import { removeFromWishlist, toggleWishlistNotify } from "./actions";
 import { PLATFORM_LABELS, type Deal, type WishlistItem } from "@/lib/types";
 import { formatPrice } from "@/lib/format";
@@ -46,6 +47,7 @@ export default async function WishlistPage() {
       </div>
 
       <WishlistForm />
+      <NoTransactionNotice compact />
 
       {wishlist.length === 0 ? (
         <div className="card p-6 text-center text-muted sm:p-10">Ta wishlist est vide pour l&apos;instant.</div>

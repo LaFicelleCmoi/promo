@@ -4,6 +4,7 @@ import { DealCard } from "@/components/DealCard";
 import { Filters, hrefWith, type FilterValues } from "@/components/Filters";
 import { isPlatform, type Deal } from "@/lib/types";
 import { NoTransactionNotice } from "@/components/NoTransactionNotice";
+import { Hero } from "@/components/Hero";
 
 const PAGE_SIZE = 24;
 
@@ -33,7 +34,8 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
   if (platform) query = query.eq("platform", platform);
   if (params.store) query = query.eq("store", params.store);
   if (Number(params.min) > 0) query = query.gte("discount", Number(params.min));
-  if (params.max !== undefined && params.max !== "" && Number(params.max) >= 0) query = query.lte("sale_price", Number(params.max));
+  if (params.max !== undefined && params.max !== "" && Number(params.max) >= 0)
+    query = query.lte("sale_price", Number(params.max));
   if (params.free === "1") query = query.eq("sale_price", 0);
   if (params.low === "1") query = query.eq("is_lowest", true);
 
@@ -63,15 +65,11 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
 
   return (
     <div className="space-y-6 sm:space-y-8">
-      <section>
-        <h1 className="text-2xl leading-tight font-black tracking-tight text-balance sm:text-4xl">
-          Toutes les promos jeux vidéo, <span className="text-accent">au même endroit</span>.
-        </h1>
-        <p className="mt-2 text-sm text-muted sm:text-base">
-          Les prix de Steam, PlayStation Store, Xbox Store, Nintendo eShop, Epic et GOG suivis chaque jour, avec
-          l&apos;historique du plus bas prix.
-        </p>
-      </section>
+      <Hero
+        deals={Object.values(platformCounts).reduce((a, b) => a + b, 0)}
+        stores={new Set(rows.map((r) => r.store)).size}
+        platforms={Object.values(platformCounts).filter((n) => n > 0).length}
+      />
 
       <NoTransactionNotice />
 
@@ -95,9 +93,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
       </div>
 
       {deals.length === 0 && !error ? (
-        <div className="card p-6 text-center text-muted sm:p-10">
-          Aucune promo ne correspond à ces filtres.
-        </div>
+        <div className="card p-6 text-center text-muted sm:p-10">Aucune promo ne correspond à ces filtres.</div>
       ) : (
         <div className="grid gap-3 xs:grid-cols-2 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
           {deals.map((deal) => (

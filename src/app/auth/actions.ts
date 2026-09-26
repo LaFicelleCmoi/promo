@@ -55,7 +55,12 @@ export async function signup(_prev: AuthState, formData: FormData): Promise<Auth
 
   if (error) {
     return {
-      error: error.code === "user_already_exists" ? "Un compte existe déjà avec cet email." : error.message,
+      error:
+        error.code === "user_already_exists"
+          ? "Un compte existe déjà avec cet email."
+          : /confirmation email/i.test(error.message)
+            ? "Impossible d'envoyer l'email de confirmation. Réessaie dans quelques minutes."
+            : error.message,
     };
   }
 

@@ -75,26 +75,37 @@ prix observé**, et un badge **« Plus bas prix »** apparaît quand le prix act
    curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/sync
    ```
 
-## Emails (Resend)
+## Emails
 
-Tous les emails utilisent la clé API Resend **« Promo Tracker »**.
+Deux envois d'emails : la **confirmation d'inscription** (envoyée par Supabase Auth) et les **alertes de wishlist**
+(envoyées par `/api/sync`). Les deux passent par le même compte.
 
-**Alertes wishlist** — mets la clé dans `RESEND_API_KEY`. Après chaque synchro, `/api/sync` envoie à chaque
-utilisateur un email récapitulant les nouvelles promos de sa wishlist (une promo n'est notifiée qu'une fois).
+### Option 1 — Gmail (gratuit, sans domaine)
 
-**Emails d'inscription / confirmation (Supabase Auth)** — dans Supabase, *Authentication → Emails → SMTP Settings* :
+1. Crée une adresse Gmail dédiée (ex. `promotracker.alertes@gmail.com`).
+2. Active la validation en 2 étapes, puis crée un mot de passe d'application :
+   <https://myaccount.google.com/apppasswords>.
+3. Variables d'environnement (Vercel + `.env.local`) :
 
-| Champ          | Valeur                                    |
-| -------------- | ----------------------------------------- |
-| Host           | `smtp.resend.com`                         |
-| Port           | `465`                                     |
-| Username       | `resend`                                  |
-| Password       | la clé API « Promo Tracker »              |
-| Sender email   | l'adresse de `EMAIL_FROM`                 |
-| Sender name    | `Promo Tracker`                           |
+   ```
+   SMTP_HOST=smtp.gmail.com
+   SMTP_PORT=465
+   SMTP_USER=promotracker.alertes@gmail.com
+   SMTP_PASS=<mot de passe d'application>
+   EMAIL_FROM=Promo Tracker <promotracker.alertes@gmail.com>
+   ```
 
-> Sans domaine vérifié sur Resend, l'expéditeur `onboarding@resend.dev` ne peut écrire **qu'à l'adresse du
-> compte Resend**. Ajoute et vérifie ton domaine (*Resend → Domains*) pour écrire à tous les utilisateurs.
+4. Supabase → *Authentication → Emails → SMTP Settings* : host `smtp.gmail.com`, port `465`, username = l'adresse
+   Gmail, password = le mot de passe d'application, sender email = l'adresse Gmail, sender name `Promo Tracker`.
+
+Limite Gmail : environ 500 emails par jour.
+
+### Option 2 — Resend (avec un domaine)
+
+Utilisée si `SMTP_USER`/`SMTP_PASS` sont vides : `RESEND_API_KEY` (clé « Promo Tracker »). Sans domaine vérifié sur
+Resend, l'expéditeur `onboarding@resend.dev` ne peut écrire **qu'à l'adresse du compte Resend** : ajoute ton domaine
+dans *Resend → Domains* pour écrire à tous les utilisateurs. Côté Supabase : host `smtp.resend.com`, port `465`,
+username `resend` (en minuscules), password = la clé API.
 
 ## Déploiement (Vercel)
 

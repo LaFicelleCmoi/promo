@@ -81,7 +81,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
         </p>
       )}
 
-      <div className="flex items-center justify-between text-sm text-muted">
+      <div id="resultats" className="flex scroll-mt-20 items-center justify-between text-sm text-muted">
         <span>
           {count ?? 0} promo{(count ?? 0) > 1 ? "s" : ""}
         </span>
@@ -105,12 +105,12 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
       {totalPages > 1 && (
         <nav className="grid grid-cols-2 gap-2 sm:flex sm:justify-center">
           {page > 1 && (
-            <Link href={hrefWith({ ...params, platform }, { page: String(page - 1) })} className="btn-ghost">
+            <Link href={`${hrefWith({ ...params, platform }, { page: page - 1 > 1 ? String(page - 1) : undefined })}#resultats`} className="btn-ghost">
               ← Précédent
             </Link>
           )}
           {page < totalPages && (
-            <Link href={hrefWith({ ...params, platform }, { page: String(page + 1) })} className="btn-ghost">
+            <Link href={`${hrefWith({ ...params, platform }, { page: String(page + 1) })}#resultats`} className="btn-ghost">
               Suivant →
             </Link>
           )}

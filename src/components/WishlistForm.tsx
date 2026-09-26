@@ -42,6 +42,10 @@ export function WishlistForm() {
       <button type="submit" disabled={pending} className="btn-primary">
         {pending ? "Ajout…" : "Ajouter"}
       </button>
+      <label className="flex items-center gap-2 text-sm text-slate-300 sm:col-span-4">
+        <input type="checkbox" name="notify" defaultChecked className="accent-accent" />
+        M&apos;alerter par email quand une promo correspond
+      </label>
       {state?.error && (
         <p role="alert" className="text-sm text-danger sm:col-span-4">
           {state.error}

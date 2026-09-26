@@ -3,7 +3,6 @@ import { createClient } from "@/lib/supabase/server";
 import { DealCard } from "@/components/DealCard";
 import { Filters, hrefWith, type FilterValues } from "@/components/Filters";
 import { isPlatform, type Deal } from "@/lib/types";
-import { NoTransactionNotice } from "@/components/NoTransactionNotice";
 import { Hero } from "@/components/Hero";
 
 const PAGE_SIZE = 24;
@@ -67,11 +66,9 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
     <div className="space-y-6 sm:space-y-8">
       <Hero
         deals={Object.values(platformCounts).reduce((a, b) => a + b, 0)}
-        stores={new Set(rows.map((r) => r.store)).size}
         platforms={Object.values(platformCounts).filter((n) => n > 0).length}
+        query={params.q}
       />
-
-      <NoTransactionNotice />
 
       <Filters values={{ ...params, platform }} stores={stores} platformCounts={platformCounts} />
 
@@ -105,12 +102,18 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
       {totalPages > 1 && (
         <nav className="grid grid-cols-2 gap-2 sm:flex sm:justify-center">
           {page > 1 && (
-            <Link href={`${hrefWith({ ...params, platform }, { page: page - 1 > 1 ? String(page - 1) : undefined })}#resultats`} className="btn-ghost">
+            <Link
+              href={`${hrefWith({ ...params, platform }, { page: page - 1 > 1 ? String(page - 1) : undefined })}#resultats`}
+              className="btn-ghost"
+            >
               ← Précédent
             </Link>
           )}
           {page < totalPages && (
-            <Link href={`${hrefWith({ ...params, platform }, { page: String(page + 1) })}#resultats`} className="btn-ghost">
+            <Link
+              href={`${hrefWith({ ...params, platform }, { page: String(page + 1) })}#resultats`}
+              className="btn-ghost"
+            >
               Suivant →
             </Link>
           )}

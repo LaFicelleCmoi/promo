@@ -69,7 +69,13 @@ export function DealCard({ deal, userId }: Props) {
           <div className="flex flex-wrap items-center gap-1 text-[10px] font-medium sm:gap-1.5 sm:text-[11px]">
             <span className="rounded bg-surface-2 px-1.5 py-0.5 text-slate-300">{PLATFORM_LABELS[deal.platform]}</span>
             <span className="max-w-full truncate rounded bg-surface-2 px-1.5 py-0.5 text-muted">{deal.store}</span>
-            {deal.source === "community" && (
+            {deal.external_id.startsWith("bundle_") && (
+            <span className="rounded bg-amber-400/15 px-1.5 py-0.5 font-semibold text-amber-300">Bundle</span>
+          )}
+          {deal.external_id.startsWith("sub_") && (
+            <span className="rounded bg-sky-400/15 px-1.5 py-0.5 font-semibold text-sky-300">Pack</span>
+          )}
+          {deal.source === "community" && (
               <span className="rounded bg-accent/15 px-1.5 py-0.5 text-accent">Communauté</span>
             )}
           </div>

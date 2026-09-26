@@ -56,6 +56,8 @@ export function dealAlertEmail(username: string, items: AlertItem[], siteUrl: st
               <a href="${siteUrl}/wishlist" style="display:inline-block;background:#7c5cff;color:#fff;font-weight:600;padding:10px 16px;border-radius:8px;text-decoration:none;">Voir ma wishlist</a>
             </p>
             <p style="margin:20px 0 0;color:#8b93a7;font-size:11px;">
+              Promo Tracker ne vend rien : aucun paiement ne se fait sur le site, l'achat a lieu sur la boutique officielle.
+              Nous ne te demanderons jamais tes coordonnées bancaires.<br /><br />
               Tu reçois cet email car tu as activé les alertes sur ta wishlist Promo Tracker.
               Tu peux les désactiver depuis <a href="${siteUrl}/wishlist" style="color:#7c5cff;">ta wishlist</a>.
             </p>
@@ -73,6 +75,8 @@ export function dealAlertEmail(username: string, items: AlertItem[], siteUrl: st
     ...items.map(({ deal }) => `- ${deal.title} (${deal.store}) : ${formatPrice(deal.sale_price, deal.currency)} → ${deal.url}`),
     "",
     `Ta wishlist : ${siteUrl}/wishlist`,
+    "",
+    "Promo Tracker ne vend rien : aucun paiement sur le site, l'achat se fait sur la boutique officielle.",
   ].join("\n");
 
   return { subject, html, text };

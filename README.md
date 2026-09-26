@@ -11,6 +11,7 @@ connexion / inscription, wishlist et prix cibles.
 | Langage       | TypeScript                                                             |
 | UI            | Tailwind CSS v4                                                        |
 | Base + Auth   | [Supabase](https://supabase.com) (Postgres, Auth email/mot de passe, RLS) |
+| Emails        | [Resend](https://resend.com) — clé API « Promo Tracker »               |
 | Hébergement   | Vercel (+ Vercel Cron pour la synchro quotidienne)                     |
 
 ## Sources des promos
@@ -33,12 +34,14 @@ les utilisateurs connectés via **« Proposer une promo »**.
 - Inscription (pseudo, email, mot de passe) avec confirmation par email, connexion, déconnexion.
 - Wishlist : jeux à surveiller, plateforme et prix cible optionnels ; les promos correspondantes s'affichent.
 - Ajout d'une promo à la wishlist en un clic, partage de promos communautaires (suppression par l'auteur).
+- Alertes email (Resend) quand une promo correspond à un jeu de la wishlist, activables jeu par jeu.
 - Synchro automatique quotidienne (`/api/sync`) + purge des promos expirées.
 
 ## Installation
 
 1. Crée un projet sur [supabase.com](https://supabase.com).
-2. Dans **SQL Editor**, exécute [`supabase/migrations/0001_init.sql`](supabase/migrations/0001_init.sql).
+2. Dans **SQL Editor**, exécute dans l'ordre [`0001_init.sql`](supabase/migrations/0001_init.sql) puis
+   [`0002_email_alerts.sql`](supabase/migrations/0002_email_alerts.sql).
 3. Dans **Authentication → URL Configuration**, ajoute `http://localhost:3000/auth/callback`
    (et l'URL de prod) aux *Redirect URLs*.
 4. Configure l'environnement :
@@ -61,6 +64,27 @@ les utilisateurs connectés via **« Proposer une promo »**.
    curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/sync
    ```
 
+## Emails (Resend)
+
+Tous les emails utilisent la clé API Resend **« Promo Tracker »**.
+
+**Alertes wishlist** — mets la clé dans `RESEND_API_KEY`. Après chaque synchro, `/api/sync` envoie à chaque
+utilisateur un email récapitulant les nouvelles promos de sa wishlist (une promo n'est notifiée qu'une fois).
+
+**Emails d'inscription / confirmation (Supabase Auth)** — dans Supabase, *Authentication → Emails → SMTP Settings* :
+
+| Champ          | Valeur                                    |
+| -------------- | ----------------------------------------- |
+| Host           | `smtp.resend.com`                         |
+| Port           | `465`                                     |
+| Username       | `resend`                                  |
+| Password       | la clé API « Promo Tracker »              |
+| Sender email   | l'adresse de `EMAIL_FROM`                 |
+| Sender name    | `Promo Tracker`                           |
+
+> Sans domaine vérifié sur Resend, l'expéditeur `onboarding@resend.dev` ne peut écrire **qu'à l'adresse du
+> compte Resend**. Ajoute et vérifie ton domaine (*Resend → Domains*) pour écrire à tous les utilisateurs.
+
 ## Déploiement (Vercel)
 
 Importe le repo sur Vercel, ajoute les variables de `.env.example` (avec `NEXT_PUBLIC_SITE_URL` = URL de prod).
@@ -80,6 +104,7 @@ src/
   components/             Header, DealCard, Filters, formulaires
   lib/
     sources/              connecteurs CheapShark, Epic, Nintendo
+    email/                alertes wishlist et template d'email (Resend)
     supabase/             clients serveur, admin et proxy (session)
   proxy.ts                rafraîchit la session et protège les pages privées
 supabase/migrations/      schéma SQL + RLS

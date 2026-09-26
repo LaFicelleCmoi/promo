@@ -1,12 +1,14 @@
 import type { DealInput } from "@/lib/types";
 import { computeDiscount } from "@/lib/format";
 
-// Promos PC multi-boutiques (Steam, GOG, Humble, Fanatical, GMG, Epic, Ubisoft...).
+// Promos PC des autres revendeurs (Humble, Fanatical, GMG, Epic, Ubisoft...).
+// Steam et GOG ont leur propre connecteur (prix en euros) : on les exclut ici pour éviter les doublons.
 // https://apidocs.cheapshark.com/
 const API = "https://www.cheapshark.com/api/1.0";
 const USER_AGENT = "PromoTracker/1.0 (+https://github.com/LaFicelleCmoi/promo)";
 const PAGES = 5;
 const PAGE_SIZE = 60;
+const EXCLUDED_STORES = new Set(["1", "7"]); // 1 = Steam, 7 = GOG
 
 type Store = { storeID: string; storeName: string; isActive: number };
 type CheapSharkDeal = {
@@ -45,22 +47,25 @@ export async function fetchCheapSharkDeals(): Promise<DealInput[]> {
     ),
   );
 
-  return pages.flat().map((d) => {
-    const sale = Number(d.salePrice);
-    const normal = Number(d.normalPrice);
-    return {
-      source: "cheapshark",
-      external_id: d.dealID,
-      title: d.title,
-      platform: "pc",
-      store: storeNames.get(d.storeID) ?? "PC",
-      url: `https://www.cheapshark.com/redirect?dealID=${d.dealID}`,
-      image_url: bestImage(d),
-      normal_price: normal,
-      sale_price: sale,
-      discount: computeDiscount(normal, sale),
-      currency: "USD",
-      ends_at: null,
-    };
-  });
+  return pages
+    .flat()
+    .filter((d) => !EXCLUDED_STORES.has(d.storeID))
+    .map((d) => {
+      const sale = Number(d.salePrice);
+      const normal = Number(d.normalPrice);
+      return {
+        source: "cheapshark",
+        external_id: d.dealID,
+        title: d.title,
+        platform: "pc",
+        store: storeNames.get(d.storeID) ?? "PC",
+        url: `https://www.cheapshark.com/redirect?dealID=${d.dealID}`,
+        image_url: bestImage(d),
+        normal_price: normal,
+        sale_price: sale,
+        discount: computeDiscount(normal, sale),
+        currency: "USD",
+        ends_at: null,
+      };
+    });
 }

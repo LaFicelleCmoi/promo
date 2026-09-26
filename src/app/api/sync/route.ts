@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { fetchCheapSharkDeals } from "@/lib/sources/cheapshark";
 import { fetchEpicDeals } from "@/lib/sources/epic";
 import { fetchNintendoDeals } from "@/lib/sources/nintendo";
+import { sendWishlistAlerts } from "@/lib/email/alerts";
 import type { DealInput, DealSource } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -51,7 +52,14 @@ export async function GET(request: NextRequest) {
     older_than: startedAt,
   });
 
-  return NextResponse.json({ ok: true, report, purged: error ? error.message : purged });
+  let emails: number | string;
+  try {
+    emails = await sendWishlistAlerts(supabase);
+  } catch (err) {
+    emails = `erreur : ${err instanceof Error ? err.message : String(err)}`;
+  }
+
+  return NextResponse.json({ ok: true, report, purged: error ? error.message : purged, emails });
 }
 
 function dedupe(deals: DealInput[]) {

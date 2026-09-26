@@ -18,7 +18,7 @@ export function AuthForm({ mode, next, initialError }: Props) {
       <h1 className="text-2xl font-bold">{isSignup ? "Créer un compte" : "Connexion"}</h1>
       <p className="mt-1 text-sm text-muted">
         {isSignup
-          ? "Wishlist, alertes de prix et partage de promos."
+          ? "Wishlist, alertes de prix et partage de promos. 100 % gratuit, aucune carte bancaire demandée."
           : "Content de te revoir ! Connecte-toi pour retrouver ta wishlist."}
       </p>
 

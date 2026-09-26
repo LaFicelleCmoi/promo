@@ -40,8 +40,8 @@ les utilisateurs connectés via **« Proposer une promo »**.
 ## Installation
 
 1. Crée un projet sur [supabase.com](https://supabase.com).
-2. Dans **SQL Editor**, exécute dans l'ordre [`0001_init.sql`](supabase/migrations/0001_init.sql) puis
-   [`0002_email_alerts.sql`](supabase/migrations/0002_email_alerts.sql).
+2. Dans **SQL Editor**, exécute dans l'ordre les fichiers de [`supabase/migrations/`](supabase/migrations/)
+   (`0001`, `0002`, `0003`).
 3. Dans **Authentication → URL Configuration**, ajoute `http://localhost:3000/auth/callback`
    (et l'URL de prod) aux *Redirect URLs*.
 4. Configure l'environnement :

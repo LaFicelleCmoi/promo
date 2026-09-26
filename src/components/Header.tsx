@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getUser } from "@/lib/supabase/server";
 import { logout } from "@/app/auth/actions";
 import { MobileMenu } from "@/components/MobileMenu";
+import StarBorder from "@/components/reactbits/StarBorder";
 
 export async function Header() {
   const user = await getUser();
@@ -46,9 +47,9 @@ export async function Header() {
               <Link href="/login" className="btn-ghost py-1.5">
                 Connexion
               </Link>
-              <Link href="/signup" className="btn-primary py-1.5">
+              <StarBorder as={Link} href="/signup" speed="5s" innerClassName="px-4 py-1.5 text-sm">
                 Inscription
-              </Link>
+              </StarBorder>
             </>
           )}
         </div>

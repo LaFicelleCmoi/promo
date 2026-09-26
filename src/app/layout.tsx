@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Header } from "@/components/Header";
 import "./globals.css";
 
@@ -7,13 +7,20 @@ export const metadata: Metadata = {
   description: "Suis les promos jeux vidéo sur PC, PlayStation, Xbox et Nintendo Switch. Wishlist et alertes de prix.",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#0b0d12",
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
       <body className="min-h-screen">
         <Header />
-        <main className="mx-auto max-w-7xl px-4 py-8">{children}</main>
-        <footer className="mx-auto max-w-7xl px-4 pb-10 text-xs text-muted">
+        <main className="mx-auto max-w-7xl px-4 py-5 sm:py-8">{children}</main>
+        <footer className="mx-auto max-w-7xl px-4 pb-[max(2.5rem,env(safe-area-inset-bottom))] text-xs text-muted">
           Données : CheapShark, Epic Games Store, Nintendo eShop et la communauté. Prix indicatifs, vérifie sur la
           boutique avant d&apos;acheter.
         </footer>

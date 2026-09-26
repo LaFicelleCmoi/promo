@@ -3,6 +3,10 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { fetchCheapSharkDeals } from "@/lib/sources/cheapshark";
 import { fetchEpicDeals } from "@/lib/sources/epic";
 import { fetchNintendoDeals } from "@/lib/sources/nintendo";
+import { fetchSteamDeals } from "@/lib/sources/steam";
+import { fetchGogDeals } from "@/lib/sources/gog";
+import { fetchPlayStationDeals } from "@/lib/sources/playstation";
+import { fetchXboxDeals } from "@/lib/sources/xbox";
 import { sendWishlistAlerts } from "@/lib/email/alerts";
 import type { DealInput, DealSource } from "@/lib/types";
 
@@ -10,9 +14,13 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 const SOURCES: Record<Exclude<DealSource, "community">, () => Promise<DealInput[]>> = {
-  cheapshark: fetchCheapSharkDeals,
-  epic: fetchEpicDeals,
+  steam: fetchSteamDeals,
+  playstation: fetchPlayStationDeals,
+  xbox: fetchXboxDeals,
   nintendo: fetchNintendoDeals,
+  epic: fetchEpicDeals,
+  gog: fetchGogDeals,
+  cheapshark: fetchCheapSharkDeals,
 };
 
 const CHUNK = 500;
@@ -46,6 +54,9 @@ export async function GET(request: NextRequest) {
     }),
   );
 
+  // Relevé quotidien des prix + mise à jour du plus bas prix observé.
+  const { data: priceRecords, error: historyError } = await supabase.rpc("record_price_history");
+
   // On ne purge que les sources synchronisées avec succès.
   const { data: purged, error } = await supabase.rpc("purge_stale_deals", {
     synced_sources: synced,
@@ -59,7 +70,13 @@ export async function GET(request: NextRequest) {
     emails = `erreur : ${err instanceof Error ? err.message : String(err)}`;
   }
 
-  return NextResponse.json({ ok: true, report, purged: error ? error.message : purged, emails });
+  return NextResponse.json({
+    ok: true,
+    report,
+    priceHistory: historyError ? historyError.message : priceRecords,
+    purged: error ? error.message : purged,
+    emails,
+  });
 }
 
 function dedupe(deals: DealInput[]) {

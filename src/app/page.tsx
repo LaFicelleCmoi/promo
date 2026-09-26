@@ -60,12 +60,12 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
   const stores = [...new Set(rows.filter((r) => !platform || r.platform === platform).map((r) => r.store))].sort();
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <section>
-        <h1 className="text-3xl font-black tracking-tight sm:text-4xl">
+        <h1 className="text-2xl leading-tight font-black tracking-tight text-balance sm:text-4xl">
           Toutes les promos jeux vidéo, <span className="text-accent">au même endroit</span>.
         </h1>
-        <p className="mt-2 text-muted">
+        <p className="mt-2 text-sm text-muted sm:text-base">
           PC, PlayStation, Xbox, Nintendo Switch : Steam, Epic, GOG, eShop et les bons plans partagés par la communauté.
         </p>
       </section>
@@ -90,11 +90,11 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
       </div>
 
       {deals.length === 0 && !error ? (
-        <div className="card p-10 text-center text-muted">
+        <div className="card p-6 text-center text-muted sm:p-10">
           Aucune promo ne correspond à ces filtres.
         </div>
       ) : (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-3 xs:grid-cols-2 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
           {deals.map((deal) => (
             <DealCard key={deal.id} deal={deal} userId={userData.user?.id} />
           ))}
@@ -102,7 +102,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
       )}
 
       {totalPages > 1 && (
-        <nav className="flex justify-center gap-2">
+        <nav className="grid grid-cols-2 gap-2 sm:flex sm:justify-center">
           {page > 1 && (
             <Link href={hrefWith({ ...params, platform }, { page: String(page - 1) })} className="btn-ghost">
               ← Précédent

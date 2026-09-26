@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PLATFORMS, PLATFORM_LABELS } from "@/lib/types";
+import { FiltersToggle } from "@/components/FiltersToggle";
 
 export type FilterValues = {
   q?: string;
@@ -32,10 +33,11 @@ export function hrefWith(values: FilterValues, patch: Partial<FilterValues>) {
 
 export function Filters({ values, stores, platformCounts }: Props) {
   const total = Object.values(platformCounts).reduce((a, b) => a + b, 0);
+  const activeCount = [values.q, values.store, values.min, values.max, values.free].filter(Boolean).length;
 
   return (
     <div className="space-y-4">
-      <nav className="flex flex-wrap gap-2">
+      <nav className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
         <PlatformTab href={hrefWith(values, { platform: undefined, store: undefined, page: undefined })} active={!values.platform}>
           Toutes <Count n={total} />
         </PlatformTab>
@@ -46,6 +48,7 @@ export function Filters({ values, stores, platformCounts }: Props) {
         ))}
       </nav>
 
+      <FiltersToggle activeCount={activeCount}>
       <form method="get" action="/" className="card grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-6">
         {values.platform && <input type="hidden" name="platform" value={values.platform} />}
 
@@ -104,12 +107,12 @@ export function Filters({ values, stores, platformCounts }: Props) {
           </select>
         </div>
 
-        <div className="flex items-center justify-between gap-3 sm:col-span-2 lg:col-span-6">
+        <div className="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between lg:col-span-6">
           <label className="flex items-center gap-2 text-sm text-slate-300">
             <input type="checkbox" name="free" value="1" defaultChecked={values.free === "1"} className="accent-accent" />
             Uniquement les jeux gratuits
           </label>
-          <div className="flex gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:flex">
             <Link href={values.platform ? `/?platform=${values.platform}` : "/"} className="btn-ghost">
               Réinitialiser
             </Link>
@@ -119,6 +122,7 @@ export function Filters({ values, stores, platformCounts }: Props) {
           </div>
         </div>
       </form>
+      </FiltersToggle>
     </div>
   );
 }
@@ -127,7 +131,7 @@ function PlatformTab({ href, active, children }: { href: string; active: boolean
   return (
     <Link
       href={href}
-      className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${
+      className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium whitespace-nowrap transition sm:py-1.5 ${
         active ? "border-accent bg-accent text-white" : "border-border bg-surface text-slate-300 hover:border-accent"
       }`}
     >

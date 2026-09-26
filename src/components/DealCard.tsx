@@ -19,55 +19,62 @@ export function DealCard({ deal, userId }: Props) {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={deal.image_url} alt="" loading="lazy" className="h-full w-full object-cover" />
         ) : (
-          <div className="flex h-full items-center justify-center text-3xl text-muted">🎮</div>
+          <div className="flex h-full items-center justify-center text-muted">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M6 11h4M8 9v4M15 12h.01M18 10h.01" />
+              <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59l-.9 7.2A2.5 2.5 0 0 0 4.28 18.6c.84 0 1.62-.43 2.07-1.14L8 15h8l1.65 2.46c.45.71 1.23 1.14 2.07 1.14a2.5 2.5 0 0 0 2.48-2.81l-.9-7.2A4 4 0 0 0 17.32 5z" />
+            </svg>
+          </div>
         )}
         {deal.discount > 0 && (
-          <span className="absolute top-2 left-2 rounded-md bg-deal px-2 py-0.5 text-sm font-black text-black">
+          <span className="absolute top-2 left-2 rounded-md bg-deal px-1.5 py-0.5 text-xs font-black text-black sm:px-2 sm:text-sm">
             -{deal.discount}%
           </span>
         )}
         {deal.sale_price === 0 && (
-          <span className="absolute top-2 right-2 rounded-md bg-accent px-2 py-0.5 text-xs font-bold text-white">
+          <span className="absolute top-2 right-2 rounded-md bg-accent px-1.5 py-0.5 text-[10px] font-bold text-white sm:px-2 sm:text-xs">
             GRATUIT
           </span>
         )}
       </a>
 
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-medium">
+      <div className="flex flex-1 flex-col gap-2 p-3 sm:p-4">
+        <div className="flex flex-wrap items-center gap-1 text-[10px] font-medium sm:gap-1.5 sm:text-[11px]">
           <span className="rounded bg-surface-2 px-1.5 py-0.5 text-slate-300">{PLATFORM_LABELS[deal.platform]}</span>
-          <span className="rounded bg-surface-2 px-1.5 py-0.5 text-muted">{deal.store}</span>
+          <span className="max-w-full truncate rounded bg-surface-2 px-1.5 py-0.5 text-muted">{deal.store}</span>
           {deal.source === "community" && (
             <span className="rounded bg-accent/15 px-1.5 py-0.5 text-accent">Communauté</span>
           )}
         </div>
 
-        <h3 className="line-clamp-2 leading-snug font-semibold" title={deal.title}>
+        <h3 className="line-clamp-2 text-sm leading-snug font-semibold sm:text-base" title={deal.title}>
           <a href={deal.url} target="_blank" rel="noopener noreferrer nofollow" className="hover:text-accent">
             {deal.title}
           </a>
         </h3>
 
-        <div className="mt-auto flex items-end justify-between gap-2 pt-2">
+        <div className="mt-auto flex flex-wrap items-end justify-between gap-x-2 gap-y-1 pt-1 sm:pt-2">
           <div>
             {normal && <div className="text-xs text-muted line-through">{normal}</div>}
-            <div className="text-lg font-bold text-deal">{sale}</div>
+            <div className="text-base font-bold text-deal sm:text-lg">{sale}</div>
           </div>
-          {timeLeft && <span className="text-xs text-amber-400">{timeLeft}</span>}
+          {timeLeft && <span className="text-[11px] text-amber-400 sm:text-xs">{timeLeft}</span>}
         </div>
 
         {userId && (
-          <div className="flex gap-2 border-t border-border pt-3">
+          <div className="flex gap-2 border-t border-border pt-2 sm:pt-3">
             <form action={addToWishlist} className="flex-1">
               <input type="hidden" name="title" value={deal.title} />
               <input type="hidden" name="platform" value={deal.platform} />
               <input type="hidden" name="notify" value="1" />
-              <button className="w-full text-left text-xs text-muted hover:text-accent">+ Ajouter à ma wishlist</button>
+              <button className="w-full py-1 text-left text-xs text-muted hover:text-accent">
+                + <span className="hidden sm:inline">Ajouter à ma </span>wishlist
+              </button>
             </form>
             {isOwner && (
               <form action={deleteDeal}>
                 <input type="hidden" name="id" value={deal.id} />
-                <button className="text-xs text-muted hover:text-danger">Supprimer</button>
+                <button className="py-1 text-xs text-muted hover:text-danger">Supprimer</button>
               </form>
             )}
           </div>

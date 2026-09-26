@@ -14,7 +14,7 @@ export function AuthForm({ mode, next, initialError }: Props) {
   const isSignup = mode === "signup";
 
   return (
-    <div className="card mx-auto mt-10 w-full max-w-md p-8">
+    <div className="card mx-auto mt-2 w-full max-w-md p-5 sm:mt-10 sm:p-8">
       <h1 className="text-2xl font-bold">{isSignup ? "Créer un compte" : "Connexion"}</h1>
       <p className="mt-1 text-sm text-muted">
         {isSignup
@@ -82,7 +82,7 @@ export function AuthForm({ mode, next, initialError }: Props) {
             </p>
           )}
 
-          <button type="submit" disabled={pending} className="btn-primary w-full">
+          <button type="submit" disabled={pending} className="btn-primary w-full py-3 sm:py-2">
             {pending ? "Patiente…" : isSignup ? "S'inscrire" : "Se connecter"}
           </button>
         </form>

@@ -6,8 +6,15 @@ import { HeroSearch } from "@/components/HeroSearch";
 import CountUp from "@/components/reactbits/CountUp";
 import GradientText from "@/components/reactbits/GradientText";
 import type { Deal } from "@/lib/types";
+import { MAIN_STORES } from "@/lib/stores";
 
-const TRACKED_STORES = ["Steam", "PlayStation Store", "Xbox Store", "Nintendo eShop", "Epic Games", "GOG"];
+const TRACKED_STORES = MAIN_STORES;
+// Boutiques présentes sous plusieurs noms (ex. « PlayStation Store (PS4/PS5) ») : filtre par plateforme.
+const STORE_LINKS: Record<string, string> = {
+  playstation: "/?platform=playstation",
+  xbox: "/?platform=xbox",
+  nintendo: "/?platform=switch",
+};
 const FEATURED_SOURCES = ["playstation", "xbox", "steam"] as const;
 
 type Props = { deals: number; platforms: number; query?: string };
@@ -165,8 +172,14 @@ export async function Hero({ deals, platforms, query }: Props) {
           <p className="text-[11px] font-medium tracking-widest text-muted uppercase">Prix suivis sur</p>
           <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1.5">
             {TRACKED_STORES.map((store) => (
-              <li key={store} className="text-sm font-bold tracking-tight text-slate-400">
-                {store}
+              <li key={store.key}>
+                <a
+                  href={`${STORE_LINKS[store.key] ?? `/?store=${encodeURIComponent(store.label)}`}#resultats`}
+                  className="flex items-center gap-1.5 text-sm font-bold tracking-tight text-slate-300 transition hover:text-white"
+                >
+                  <span aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: store.color }} />
+                  {store.label}
+                </a>
               </li>
             ))}
           </ul>

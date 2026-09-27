@@ -12,6 +12,8 @@ import { ShareButton } from "@/components/ShareButton";
 import { GameImage } from "@/components/GameImage";
 import { getUsdToEur } from "@/lib/fx";
 import { NoTransactionNotice } from "@/components/NoTransactionNotice";
+import { StoreBadge, StoreDot } from "@/components/StoreBadge";
+import { storeTheme } from "@/lib/stores";
 
 type Params = Promise<{ id: string }>;
 
@@ -183,6 +185,7 @@ export default async function DealPage({ params }: { params: Params }) {
                             {o.title}
                           </Link>
                           <p className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-muted">
+                            <StoreDot store={o.store} />
                             {PLATFORM_LABELS[o.platform]} · {o.store}
                             {isCurrent && (
                               <span className="rounded bg-accent/15 px-1.5 text-[10px] font-semibold text-accent">
@@ -226,7 +229,7 @@ export default async function DealPage({ params }: { params: Params }) {
               <span className="rounded bg-surface-2 px-1.5 py-0.5 text-slate-300">
                 {PLATFORM_LABELS[deal.platform]}
               </span>
-              <span className="rounded bg-surface-2 px-1.5 py-0.5 text-muted">{deal.store}</span>
+              <StoreBadge store={deal.store} size="md" />
               {kind && (
                 <span
                   className={`rounded px-1.5 py-0.5 font-semibold ${kind === "Bundle" ? "bg-amber-400/15 text-amber-300" : "bg-sky-400/15 text-sky-300"}`}
@@ -291,7 +294,8 @@ export default async function DealPage({ params }: { params: Params }) {
                 href={deal.url}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
-                className="btn-primary w-full py-3 text-base"
+                className="btn w-full py-3 text-base transition hover:brightness-110"
+                style={{ backgroundColor: storeTheme(deal.store).button, color: storeTheme(deal.store).buttonText }}
               >
                 Voir sur {deal.store} ↗
               </a>

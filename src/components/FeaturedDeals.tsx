@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { formatPrice } from "@/lib/format";
 import { PLATFORM_LABELS, type Deal } from "@/lib/types";
 
@@ -25,10 +26,8 @@ export function FeaturedDeals({ deals, total }: { deals: Deal[]; total: number }
         <ul className="divide-y divide-border">
           {deals.map((deal) => (
             <li key={deal.id}>
-              <a
-                href={deal.url}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
+              <Link
+                href={`/jeu/${deal.id}`}
                 className="group flex items-center gap-4 px-5 py-4 transition hover:bg-surface-2/70"
               >
                 <div className="relative aspect-[460/215] w-28 shrink-0 overflow-hidden rounded-lg bg-surface-2">
@@ -58,7 +57,7 @@ export function FeaturedDeals({ deals, total }: { deals: Deal[]; total: number }
                     </p>
                   )}
                 </div>
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

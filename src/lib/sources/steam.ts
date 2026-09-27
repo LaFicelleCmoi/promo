@@ -137,15 +137,22 @@ async function enrichWithStore(deals: DealInput[]): Promise<DealInput[]> {
   const appIds = deals.flatMap((d) => (d.external_id.startsWith("app_") ? [Number(d.external_id.slice(4))] : []));
   const items = await getItems(
     appIds.map((appid) => ({ appid })),
-    { include_all_purchase_options: true },
+    { include_all_purchase_options: true, include_assets: true },
   );
 
   const endDates = new Map<string, string>();
+  // Images exactes (les jeux récents n'ont pas d'image à l'adresse « apps/ID/header.jpg »).
+  const images = new Map<string, string>();
   const bundles = new Map<number, PurchaseOption>();
 
   for (const item of items) {
     const options = item.purchase_options ?? [];
     const deal = deals.find((d) => d.external_id === `app_${item.appid}`);
+    const header =
+      item.assets?.asset_url_format && item.assets.header
+        ? CDN + item.assets.asset_url_format.replace("${FILENAME}", item.assets.header)
+        : null;
+    if (deal && header) images.set(deal.external_id, header);
     const main = deal && options.find((o) => o.packageid && Number(o.final_price_in_cents) / 100 === deal.sale_price);
     const end = main ? endDateOf(main) : null;
     if (deal && end) endDates.set(deal.external_id, end);
@@ -191,7 +198,14 @@ async function enrichWithStore(deals: DealInput[]): Promise<DealInput[]> {
     ];
   });
 
-  return [...deals.map((d) => ({ ...d, ends_at: endDates.get(d.external_id) ?? d.ends_at })), ...bundleDeals];
+  return [
+    ...deals.map((d) => ({
+      ...d,
+      ends_at: endDates.get(d.external_id) ?? d.ends_at,
+      image_url: images.get(d.external_id) ?? d.image_url,
+    })),
+    ...bundleDeals,
+  ];
 }
 
 export async function fetchSteamDeals(): Promise<DealInput[]> {

@@ -10,6 +10,7 @@ import { PriceHistoryChart, type PricePoint } from "@/components/PriceHistoryCha
 import { WishlistButton } from "@/components/WishlistButton";
 import { ShareButton } from "@/components/ShareButton";
 import { GameImage } from "@/components/GameImage";
+import { getUsdToEur } from "@/lib/fx";
 import { NoTransactionNotice } from "@/components/NoTransactionNotice";
 
 type Params = Promise<{ id: string }>;
@@ -96,6 +97,8 @@ export default async function DealPage({ params }: { params: Params }) {
   );
 
   const sale = formatPrice(deal.sale_price, deal.currency);
+  const eurRate = deal.currency === "USD" ? await getUsdToEur() : null;
+  const approxEur = eurRate && deal.sale_price > 0 ? formatPrice(deal.sale_price * eurRate, "EUR") : null;
   const normal =
     deal.normal_price && deal.normal_price > deal.sale_price ? formatPrice(deal.normal_price, deal.currency) : null;
   const saving = deal.normal_price && deal.normal_price > deal.sale_price ? deal.normal_price - deal.sale_price : 0;
@@ -247,6 +250,11 @@ export default async function DealPage({ params }: { params: Params }) {
                   </span>
                 )}
               </div>
+              {approxEur && (
+                <p className="mt-1 text-sm text-muted">
+                  Soit environ <span className="font-semibold text-slate-200">{approxEur}</span> (taux BCE du jour)
+                </p>
+              )}
               {normal && (
                 <p className="mt-1 text-sm text-muted">
                   Au lieu de <span className="line-through">{normal}</span>

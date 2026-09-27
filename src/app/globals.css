@@ -40,7 +40,22 @@
   }
 }
 
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+.toast-in {
+  animation: toast-in 0.25s ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .toast-in {
+    animation: none;
+  }
+
   .animate-star-movement-bottom,
   .animate-star-movement-top {
     animation: none;
@@ -48,6 +63,12 @@
 }
 
 @layer base {
+  /* La croix native des champs de recherche chevaucherait nos boutons. */
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-decoration {
+    appearance: none;
+  }
+
   html {
     color-scheme: dark;
   }

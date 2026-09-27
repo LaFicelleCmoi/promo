@@ -94,7 +94,7 @@ export default async function WishlistPage() {
                 {deals.length > 0 && (
                   <div className="mt-3 grid gap-3 xs:grid-cols-2 sm:mt-4 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
                     {deals.slice(0, 8).map((deal) => (
-                      <DealCard key={deal.id} deal={deal} />
+                      <DealCard key={deal.id} deal={deal} userId={auth.user?.id} inWishlist />
                     ))}
                   </div>
                 )}

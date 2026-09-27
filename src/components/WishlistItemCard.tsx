@@ -4,6 +4,7 @@ import { removeFromWishlist, toggleWishlistNotify, updateTargetPrice } from "@/a
 import { formatPrice } from "@/lib/format";
 import type { GameArt } from "@/lib/gameArt";
 import { PLATFORM_LABELS, type Deal, type WishlistItem } from "@/lib/types";
+import { StoreBadge, StoreDot } from "@/components/StoreBadge";
 
 type Props = { item: WishlistItem; deals: Deal[]; art: GameArt | null };
 
@@ -72,6 +73,7 @@ export function WishlistItemCard({ item, deals, art }: Props) {
                     {formatPrice(bestDeal.sale_price, bestDeal.currency)}
                   </span>{" "}
                   {bestDeal.discount > 0 && <span className="font-semibold">-{bestDeal.discount}%</span>} sur{" "}
+                  <StoreDot store={bestDeal.store} className="mr-1 align-middle" />
                   {bestDeal.store}
                 </p>
               </div>
@@ -164,7 +166,10 @@ export function WishlistItemCard({ item, deals, art }: Props) {
                       className="flex items-center justify-between gap-3 px-3 py-2 hover:bg-surface-2"
                     >
                       <span className="min-w-0 truncate text-slate-300">
-                        {d.title} <span className="text-muted">· {d.store}</span>
+                        {d.title}{" "}
+                        <span className="text-muted">
+                          · <StoreDot store={d.store} className="mx-0.5 align-middle" /> {d.store}
+                        </span>
                       </span>
                       <span className="shrink-0 font-semibold text-deal tabular-nums">
                         {formatPrice(d.sale_price, d.currency)}

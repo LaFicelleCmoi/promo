@@ -67,7 +67,8 @@ export function SearchCombobox({
     const controller = new AbortController();
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`, { signal: controller.signal });
+        const catalog = mode === "select" ? "&catalog=1" : "";
+        const res = await fetch(`/api/search?q=${encodeURIComponent(q)}${catalog}`, { signal: controller.signal });
         const json = await res.json();
         setHits(json.hits ?? []);
         setActive(-1);
@@ -81,7 +82,7 @@ export function SearchCombobox({
       clearTimeout(timer);
       controller.abort();
     };
-  }, [value]);
+  }, [value, mode]);
 
   // Ferme la liste au clic en dehors.
   useEffect(() => {
@@ -176,7 +177,9 @@ export function SearchCombobox({
             <p className="px-4 py-3 text-sm text-muted">Recherche…</p>
           ) : hits.length === 0 ? (
             <p className="px-4 py-3 text-sm text-muted">
-              Aucune promo en cours pour « {value.trim()} ».
+              {mode === "select"
+                ? `Aucun jeu trouvé pour « ${value.trim()} ».`
+                : `Aucune promo en cours pour « ${value.trim()} ».`}
               {mode === "navigate" && " Ajoute-le à ta wishlist pour être alerté."}
             </p>
           ) : (
@@ -205,8 +208,16 @@ export function SearchCombobox({
                     </p>
                   </div>
                   <div className="shrink-0 text-right">
-                    <p className="text-sm font-bold text-deal tabular-nums">{price(hit)}</p>
-                    {hit.discount > 0 && <p className="text-[11px] text-muted">-{hit.discount}%</p>}
+                    <p
+                      className={`text-sm font-bold tabular-nums ${hit.kind === "catalog" && hit.discount === 0 ? "text-slate-200" : "text-deal"}`}
+                    >
+                      {price(hit)}
+                    </p>
+                    {hit.discount > 0 ? (
+                      <p className="text-[11px] text-muted">-{hit.discount}%</p>
+                    ) : (
+                      hit.kind === "catalog" && <p className="text-[11px] text-muted">prix actuel</p>
+                    )}
                   </div>
                 </li>
               ))}

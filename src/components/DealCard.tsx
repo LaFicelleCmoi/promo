@@ -4,6 +4,7 @@ import { formatPrice, formatTimeLeft } from "@/lib/format";
 import { deleteDeal } from "@/app/deals/actions";
 import SpotlightCard from "@/components/reactbits/SpotlightCard";
 import { WishlistButton } from "@/components/WishlistButton";
+import { GameImage } from "@/components/GameImage";
 
 type Props = { deal: Deal; userId?: string | null; inWishlist?: boolean };
 
@@ -22,33 +23,10 @@ export function DealCard({ deal, userId, inWishlist = false }: Props) {
     <SpotlightCard className="card group transition hover:-translate-y-0.5 hover:border-accent/60">
       <article className="flex h-full flex-col">
         <Link href={`/jeu/${deal.id}`} className="relative block aspect-[460/215] overflow-hidden bg-surface-2">
-          {deal.image_url ? (
-            // Images servies par des CDN tiers très variés : <img> évite de les lister dans next.config.
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={deal.image_url}
-              alt=""
-              loading="lazy"
-              className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-muted">
-              <svg
-                width="40"
-                height="40"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden
-              >
-                <path d="M6 11h4M8 9v4M15 12h.01M18 10h.01" />
-                <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59l-.9 7.2A2.5 2.5 0 0 0 4.28 18.6c.84 0 1.62-.43 2.07-1.14L8 15h8l1.65 2.46c.45.71 1.23 1.14 2.07 1.14a2.5 2.5 0 0 0 2.48-2.81l-.9-7.2A4 4 0 0 0 17.32 5z" />
-              </svg>
-            </div>
-          )}
+          <GameImage
+            src={deal.image_url}
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+          />
           {deal.discount > 0 && (
             <span className="absolute top-2 left-2 rounded-md bg-deal px-1.5 py-0.5 text-xs font-black text-black sm:px-2 sm:text-sm">
               -{deal.discount}%

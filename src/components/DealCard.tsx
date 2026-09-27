@@ -5,6 +5,8 @@ import { deleteDeal } from "@/app/deals/actions";
 import SpotlightCard from "@/components/reactbits/SpotlightCard";
 import { WishlistButton } from "@/components/WishlistButton";
 import { GameImage } from "@/components/GameImage";
+import { StoreBadge, StoreDot } from "@/components/StoreBadge";
+import { storeTheme } from "@/lib/stores";
 
 type Props = { deal: Deal; userId?: string | null; inWishlist?: boolean; eurRate?: number | null };
 
@@ -32,6 +34,12 @@ export function DealCard({ deal, userId, inWishlist = false, eurRate }: Props) {
 
   return (
     <SpotlightCard className="card group transition hover:-translate-y-0.5 hover:border-accent/60">
+      {/* Liseré à la couleur de la boutique */}
+      <span
+        aria-hidden
+        className="absolute inset-x-0 top-0 z-20 h-[3px]"
+        style={{ backgroundColor: storeTheme(deal.store).color }}
+      />
       <article className="flex h-full flex-col">
         <Link href={`/jeu/${deal.id}`} className="relative block aspect-[460/215] overflow-hidden bg-surface-2">
           <GameImage
@@ -63,7 +71,7 @@ export function DealCard({ deal, userId, inWishlist = false, eurRate }: Props) {
         <div className="flex flex-1 flex-col gap-2 p-3 sm:p-4">
           <div className="flex flex-wrap items-center gap-1 text-[10px] font-medium sm:gap-1.5 sm:text-[11px]">
             <span className="rounded bg-surface-2 px-1.5 py-0.5 text-slate-300">{PLATFORM_LABELS[deal.platform]}</span>
-            <span className="max-w-full truncate rounded bg-surface-2 px-1.5 py-0.5 text-muted">{deal.store}</span>
+            <StoreBadge store={deal.store} />
             {deal.external_id.startsWith("bundle_") && (
               <span className="rounded bg-amber-400/15 px-1.5 py-0.5 font-semibold text-amber-300">Bundle</span>
             )}

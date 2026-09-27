@@ -38,6 +38,25 @@ sont suivies.
 prix observé**, et un badge **« Plus bas prix »** apparaît quand le prix actuel égale ce minimum (après au moins
 3 jours de suivi). Un filtre permet de n'afficher que ces jeux.
 
+## Gamme de couleurs des boutiques
+
+Chaque boutique a sa couleur (définie dans [`src/lib/stores.ts`](src/lib/stores.ts)), utilisée pour la pastille des
+badges, le liseré des cartes et le bouton « Voir sur … ».
+
+| Boutique          | Repère    | Bouton (fond / texte)   |
+| ----------------- | --------- | ----------------------- |
+| Steam             | `#22c3c3` | `#22c3c3` / `#062a2a`   |
+| PlayStation Store | `#4f78ff` | `#0070d1` / blanc       |
+| Xbox Store        | `#8bd12c` | `#107c10` / blanc       |
+| Nintendo eShop    | `#ff6060` | `#e60012` / blanc       |
+| Epic Games Store  | `#f4f4f5` | `#f4f4f5` / `#111111`   |
+| GOG               | `#e864e0` | `#86328a` / blanc       |
+| Humble, Fanatical, GMG, Ubisoft, Instant Gaming, IndieGala | teintes propres | — |
+
+Les repères sont vérifiés sur fond sombre : contraste ≥ 4,5:1, écart ΔE ≥ 18 entre les 6 boutiques principales en
+vision normale (≥ 6 en daltonisme, toléré car le nom de la boutique est toujours écrit). Le texte des badges reste
+neutre : la couleur ne porte jamais seule l'information.
+
 ## Fonctionnalités
 
 - Liste des promos avec filtres : plateforme, boutique, recherche, réduction minimale, prix max, gratuits, tri.

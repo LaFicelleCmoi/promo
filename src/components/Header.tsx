@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { getUser } from "@/lib/supabase/server";
+import { createClient, getUser } from "@/lib/supabase/server";
 import { MobileMenu } from "@/components/MobileMenu";
 import { NavLinks } from "@/components/NavLinks";
 import { SearchPalette, SearchTrigger } from "@/components/SearchPalette";
@@ -12,12 +12,20 @@ export async function Header() {
   const user = await getUser();
   const name = (user?.user_metadata?.username as string | undefined) ?? user?.email ?? null;
 
+  // Nombre de jeux en wishlist, affiché à côté des liens « Ma wishlist ».
+  let wishlistCount = 0;
+  if (user) {
+    const supabase = await createClient();
+    const { count } = await supabase.from("wishlist").select("id", { count: "exact", head: true });
+    wishlistCount = count ?? 0;
+  }
+
   const links = [
     { href: "/", label: "Promos" },
     { href: "/?free=1", label: "Gratuits" },
     ...(user
       ? [
-          { href: "/wishlist", label: "Ma wishlist" },
+          { href: "/wishlist", label: "Ma wishlist", badge: wishlistCount },
           { href: "/deals/new", label: "Proposer une promo" },
         ]
       : []),
@@ -46,7 +54,7 @@ export async function Header() {
           <div className="ml-auto hidden items-center gap-3 md:flex">
             <SearchTrigger />
             {user ? (
-              <UserMenu name={name ?? "Mon compte"} />
+              <UserMenu name={name ?? "Mon compte"} wishlistCount={wishlistCount} />
             ) : (
               <>
                 <Link href="/login" className="btn-ghost py-1.5">
@@ -66,7 +74,7 @@ export async function Header() {
               </Link>
             )}
             <Suspense>
-              <MobileMenu links={links} userName={name} />
+              <MobileMenu links={links} userName={name} wishlistCount={wishlistCount} />
             </Suspense>
           </div>
         </div>
@@ -76,7 +84,7 @@ export async function Header() {
       </header>
       {/* En dehors du header : son backdrop-blur piégerait un élément en position fixed. */}
       <Suspense>
-        <MobileTabBar loggedIn={Boolean(user)} />
+        <MobileTabBar loggedIn={Boolean(user)} wishlistCount={wishlistCount} />
       </Suspense>
     </>
   );

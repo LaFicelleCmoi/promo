@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { formatPrice } from "@/lib/format";
 import { GameImage } from "@/components/GameImage";
 import type { Deal } from "@/lib/types";
+import { StoreBadge, StoreDot } from "@/components/StoreBadge";
 
 function hoursLeft(iso: string) {
   const h = Math.max(1, Math.floor((new Date(iso).getTime() - Date.now()) / 3_600_000));
@@ -81,7 +82,10 @@ export async function LastChanceRail() {
               <div className="p-3">
                 <p className="truncate text-sm font-semibold text-white group-hover:text-accent">{deal.title}</p>
                 <p className="mt-1 flex items-baseline justify-between gap-2 text-xs text-muted">
-                  <span className="truncate">{deal.store}</span>
+                  <span className="flex min-w-0 items-center gap-1.5">
+                    <StoreDot store={deal.store} />
+                    <span className="truncate">{deal.store}</span>
+                  </span>
                   <span className="text-sm font-bold text-deal tabular-nums">
                     {formatPrice(deal.sale_price, deal.currency)}
                   </span>

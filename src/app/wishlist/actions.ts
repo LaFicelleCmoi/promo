@@ -35,7 +35,7 @@ async function insertItem(formData: FormData): Promise<string | null> {
   if (error?.code === "23505") return "Ce jeu est déjà dans ta wishlist.";
   if (error) return error.message;
 
-  revalidatePath("/wishlist");
+  revalidatePath("/", "layout"); // rafraîchit aussi le compteur wishlist de l'en-tête
   return null;
 }
 
@@ -72,7 +72,7 @@ export async function toggleWishlist(title: string, platform: string): Promise<T
   if (found) {
     const { error } = await supabase.from("wishlist").delete().eq("id", found.id);
     if (error) return { inWishlist: true, error: error.message };
-    revalidatePath("/wishlist");
+    revalidatePath("/", "layout"); // rafraîchit aussi le compteur wishlist de l'en-tête
     return { inWishlist: false };
   }
 
@@ -83,7 +83,7 @@ export async function toggleWishlist(title: string, platform: string): Promise<T
     notify: true,
   });
   if (error && error.code !== "23505") return { inWishlist: false, error: error.message };
-  revalidatePath("/wishlist");
+  revalidatePath("/", "layout"); // rafraîchit aussi le compteur wishlist de l'en-tête
   return { inWishlist: true };
 }
 
@@ -92,14 +92,14 @@ export async function toggleWishlistNotify(formData: FormData) {
   const notify = formData.get("notify") === "true";
   const supabase = await createClient();
   await supabase.from("wishlist").update({ notify }).eq("id", id);
-  revalidatePath("/wishlist");
+  revalidatePath("/", "layout"); // rafraîchit aussi le compteur wishlist de l'en-tête
 }
 
 export async function removeFromWishlist(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   const supabase = await createClient();
   await supabase.from("wishlist").delete().eq("id", id);
-  revalidatePath("/wishlist");
+  revalidatePath("/", "layout"); // rafraîchit aussi le compteur wishlist de l'en-tête
 }
 
 export async function updateTargetPrice(formData: FormData) {
@@ -111,5 +111,5 @@ export async function updateTargetPrice(formData: FormData) {
   if (target !== null && (!Number.isFinite(target) || target < 0)) return;
   const supabase = await createClient();
   await supabase.from("wishlist").update({ target_price: target }).eq("id", id);
-  revalidatePath("/wishlist");
+  revalidatePath("/", "layout"); // rafraîchit aussi le compteur wishlist de l'en-tête
 }

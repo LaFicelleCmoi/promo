@@ -1,30 +1,53 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { createWishlistItem, type WishlistFormState } from "@/app/wishlist/actions";
-import { PLATFORMS, PLATFORM_LABELS } from "@/lib/types";
+import { PLATFORMS, PLATFORM_LABELS, isPlatform } from "@/lib/types";
+import { SearchCombobox } from "@/components/SearchCombobox";
+import { toast } from "@/components/Toaster";
 
 export function WishlistForm() {
   const [state, action, pending] = useActionState<WishlistFormState, FormData>(createWishlistItem, undefined);
-  const formRef = useRef<HTMLFormElement>(null);
+  const [platform, setPlatform] = useState("");
+  // Change de clé après un ajout réussi : le formulaire (et la recherche) repartent à zéro.
+  const [formKey, setFormKey] = useState(0);
 
   useEffect(() => {
-    if (state?.ok) formRef.current?.reset();
+    if (state?.ok) {
+      toast("Jeu ajouté à ta wishlist");
+      setPlatform("");
+      setFormKey((k) => k + 1);
+    }
   }, [state]);
 
   return (
-    <form ref={formRef} action={action} className="card grid gap-3 p-4 sm:grid-cols-[2fr_1fr_1fr_auto] sm:items-end">
+    <form key={formKey} action={action} className="card grid gap-3 p-4 sm:grid-cols-[2fr_1fr_1fr_auto] sm:items-end">
       <div>
         <label htmlFor="w-title" className="label">
           Jeu à surveiller
         </label>
-        <input id="w-title" name="title" required minLength={2} maxLength={120} placeholder="Hollow Knight" className="input" />
+        <SearchCombobox
+          id="w-title"
+          name="title"
+          mode="select"
+          required
+          minLength={2}
+          maxLength={120}
+          placeholder="Hollow Knight, Zelda…"
+          onSelect={(hit) => isPlatform(hit.platform) && setPlatform(hit.platform)}
+        />
       </div>
       <div>
         <label htmlFor="w-platform" className="label">
           Plateforme
         </label>
-        <select id="w-platform" name="platform" defaultValue="" className="input">
+        <select
+          id="w-platform"
+          name="platform"
+          value={platform}
+          onChange={(e) => setPlatform(e.target.value)}
+          className="input"
+        >
           <option value="">Toutes</option>
           {PLATFORMS.map((p) => (
             <option key={p} value={p}>
@@ -35,7 +58,7 @@ export function WishlistForm() {
       </div>
       <div>
         <label htmlFor="w-target" className="label">
-          Prix cible
+          Prix cible (€)
         </label>
         <input id="w-target" name="target_price" inputMode="decimal" placeholder="15" className="input" />
       </div>

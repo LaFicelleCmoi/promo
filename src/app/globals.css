@@ -72,6 +72,13 @@
   html {
     color-scheme: dark;
   }
+  /* Contour de focus visible pour la navigation au clavier (pas au clic). */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
   body {
     @apply bg-bg text-slate-100 antialiased;
     -webkit-tap-highlight-color: transparent;

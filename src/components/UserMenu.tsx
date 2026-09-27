@@ -4,9 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { logout } from "@/app/auth/actions";
+import { CountBadge } from "@/components/NavLinks";
 
 /** Menu du compte : avatar (initiale) et liens personnels. */
-export function UserMenu({ name }: { name: string }) {
+export function UserMenu({ name, wishlistCount = 0 }: { name: string; wishlistCount?: number }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -67,9 +68,10 @@ export function UserMenu({ name }: { name: string }) {
           <Link
             role="menuitem"
             href="/wishlist"
-            className="block px-4 py-2.5 text-sm text-slate-200 hover:bg-surface-2"
+            className="flex items-center justify-between px-4 py-2.5 text-sm text-slate-200 hover:bg-surface-2"
           >
             Ma wishlist
+            <CountBadge n={wishlistCount} />
           </Link>
           <Link
             role="menuitem"

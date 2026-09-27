@@ -4,6 +4,7 @@ import { getUser } from "@/lib/supabase/server";
 import { logout } from "@/app/auth/actions";
 import { MobileMenu } from "@/components/MobileMenu";
 import { NavLinks } from "@/components/NavLinks";
+import { SearchPalette, SearchTrigger } from "@/components/SearchPalette";
 import StarBorder from "@/components/reactbits/StarBorder";
 
 export async function Header() {
@@ -41,6 +42,7 @@ export async function Header() {
         </nav>
 
         <div className="ml-auto hidden items-center gap-3 md:flex">
+          <SearchTrigger />
           {user ? (
             <>
               <span className="hidden max-w-40 truncate text-sm text-muted lg:inline">{name}</span>
@@ -61,6 +63,7 @@ export async function Header() {
         </div>
 
         <div className="ml-auto flex items-center gap-2 md:hidden">
+          <SearchTrigger />
           {!user && (
             <Link href="/signup" className="btn-primary px-3 py-2 text-xs">
               Inscription
@@ -71,6 +74,9 @@ export async function Header() {
           </Suspense>
         </div>
       </div>
+      <Suspense>
+        <SearchPalette />
+      </Suspense>
     </header>
   );
 }

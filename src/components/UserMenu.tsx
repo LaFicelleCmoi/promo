@@ -1,0 +1,93 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { logout } from "@/app/auth/actions";
+
+/** Menu du compte : avatar (initiale) et liens personnels. */
+export function UserMenu({ name }: { name: string }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: PointerEvent) => !ref.current?.contains(e.target as Node) && setOpen(false);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const initial = name.trim().slice(0, 1).toUpperCase() || "?";
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        className="flex h-10 items-center gap-2 rounded-lg border border-border bg-surface pr-2.5 pl-1.5 text-sm text-slate-200 transition hover:border-accent"
+      >
+        <span
+          aria-hidden
+          className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-accent to-pink-500 text-xs font-black text-white"
+        >
+          {initial}
+        </span>
+        <span className="hidden max-w-32 truncate lg:inline">{name}</span>
+        <svg
+          aria-hidden
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          className={`text-muted transition ${open ? "rotate-180" : ""}`}
+        >
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          className="absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-xl border border-border bg-surface py-1 shadow-2xl shadow-black/60"
+        >
+          <p className="truncate border-b border-border px-4 py-2.5 text-xs text-muted">
+            Connecté en tant que <span className="font-semibold text-slate-200">{name}</span>
+          </p>
+          <Link
+            role="menuitem"
+            href="/wishlist"
+            className="block px-4 py-2.5 text-sm text-slate-200 hover:bg-surface-2"
+          >
+            Ma wishlist
+          </Link>
+          <Link
+            role="menuitem"
+            href="/deals/new"
+            className="block px-4 py-2.5 text-sm text-slate-200 hover:bg-surface-2"
+          >
+            Proposer une promo
+          </Link>
+          <form action={logout} className="border-t border-border">
+            <button
+              role="menuitem"
+              className="block w-full px-4 py-2.5 text-left text-sm text-danger hover:bg-danger/10"
+            >
+              Déconnexion
+            </button>
+          </form>
+        </div>
+      )}
+    </div>
+  );
+}

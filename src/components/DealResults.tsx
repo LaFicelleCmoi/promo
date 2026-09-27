@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DealCard } from "@/components/DealCard";
-import { hrefWith, type FilterValues } from "@/components/Filters";
+import { SORTS, hrefWith, type FilterValues } from "@/components/Filters";
 import { getWishlistKeys, wishlistKey } from "@/lib/wishlist";
 import type { Deal } from "@/lib/types";
 
@@ -73,16 +73,39 @@ export async function DealResults({ values }: { values: FilterValues }) {
 
   return (
     <>
-      <div id="resultats" className="flex scroll-mt-20 items-center justify-between text-sm text-muted">
+      <div
+        id="resultats"
+        className="flex scroll-mt-20 flex-col gap-3 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
+      >
         <span>
           <span className="font-semibold text-slate-200">{new Intl.NumberFormat("fr-FR").format(total)}</span> promo
           {total > 1 ? "s" : ""}
+          {totalPages > 1 && ` · page ${page} / ${totalPages}`}
         </span>
-        {totalPages > 1 && (
-          <span>
-            Page {page} / {totalPages}
-          </span>
-        )}
+        <nav
+          aria-label="Trier les promos"
+          className="no-scrollbar -mx-4 flex gap-1 overflow-x-auto px-4 sm:mx-0 sm:px-0"
+        >
+          <span className="mr-1 hidden self-center text-xs sm:inline">Trier :</span>
+          {SORTS.map((sort) => {
+            const active = (values.sort ?? "discount") === sort.value;
+            return (
+              <Link
+                key={sort.value}
+                href={`${hrefWith(values, { sort: sort.value === "discount" ? undefined : sort.value, page: undefined })}#resultats`}
+                scroll={false}
+                aria-current={active ? "true" : undefined}
+                className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition ${
+                  active
+                    ? "bg-surface-2 text-white ring-1 ring-accent/60"
+                    : "text-muted hover:bg-surface hover:text-white"
+                }`}
+              >
+                {sort.label}
+              </Link>
+            );
+          })}
+        </nav>
       </div>
 
       {error && (

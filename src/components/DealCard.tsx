@@ -6,13 +6,24 @@ import SpotlightCard from "@/components/reactbits/SpotlightCard";
 import { WishlistButton } from "@/components/WishlistButton";
 import { GameImage } from "@/components/GameImage";
 
-type Props = { deal: Deal; userId?: string | null; inWishlist?: boolean };
+type Props = { deal: Deal; userId?: string | null; inWishlist?: boolean; eurRate?: number | null };
 
-export function DealCard({ deal, userId, inWishlist = false }: Props) {
+const HOUR = 3_600_000;
+
+export function DealCard({ deal, userId, inWishlist = false, eurRate }: Props) {
   const sale = formatPrice(deal.sale_price, deal.currency);
   const normal =
     deal.normal_price && deal.normal_price > deal.sale_price ? formatPrice(deal.normal_price, deal.currency) : null;
   const timeLeft = formatTimeLeft(deal.ends_at);
+  const now = Date.now();
+  const endingSoon = deal.ends_at !== null && new Date(deal.ends_at).getTime() - now < 24 * HOUR;
+  // « Nouveau » : premier jour de suivi (l'historique des prix survit aux allers-retours d'une promo,
+  // contrairement à created_at qui est remis à zéro quand une promo réapparaît).
+  const isNew =
+    deal.source !== "community" && deal.tracked_days <= 1 && now - new Date(deal.created_at).getTime() < 24 * HOUR;
+  // Prix en dollars (CheapShark) : équivalent approximatif en euros.
+  const approxEur =
+    deal.currency === "USD" && eurRate && deal.sale_price > 0 ? formatPrice(deal.sale_price * eurRate, "EUR") : null;
   const lowest =
     deal.tracked_days >= 3 && deal.lowest_price !== null && deal.lowest_price < deal.sale_price
       ? formatPrice(deal.lowest_price, deal.currency)
@@ -30,6 +41,11 @@ export function DealCard({ deal, userId, inWishlist = false }: Props) {
           {deal.discount > 0 && (
             <span className="absolute top-2 left-2 rounded-md bg-deal px-1.5 py-0.5 text-xs font-black text-black sm:px-2 sm:text-sm">
               -{deal.discount}%
+            </span>
+          )}
+          {isNew && !deal.is_lowest && (
+            <span className="absolute bottom-2 left-2 rounded-md bg-sky-400 px-1.5 py-0.5 text-[10px] font-bold text-black sm:px-2 sm:text-xs">
+              Nouveau
             </span>
           )}
           {deal.is_lowest && deal.sale_price > 0 && (
@@ -69,8 +85,21 @@ export function DealCard({ deal, userId, inWishlist = false }: Props) {
             <div>
               {normal && <div className="text-xs text-muted line-through">{normal}</div>}
               <div className="text-base font-bold text-deal sm:text-lg">{sale}</div>
+              {approxEur && <div className="text-[11px] text-muted">≈ {approxEur}</div>}
             </div>
-            {timeLeft && <span className="text-[11px] text-amber-400 sm:text-xs">{timeLeft}</span>}
+            {timeLeft && (
+              <span
+                className={`flex items-center gap-1 text-[11px] sm:text-xs ${endingSoon ? "font-semibold text-danger" : "text-amber-400"}`}
+              >
+                {endingSoon && (
+                  <span
+                    aria-hidden
+                    className="h-1.5 w-1.5 animate-pulse rounded-full bg-danger motion-reduce:animate-none"
+                  />
+                )}
+                {endingSoon ? `Dernières heures · ${timeLeft.replace("Encore ", "")}` : timeLeft}
+              </span>
+            )}
           </div>
 
           {lowest && (

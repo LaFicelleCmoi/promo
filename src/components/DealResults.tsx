@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { DealCard } from "@/components/DealCard";
 import { SORTS, hrefWith, type FilterValues } from "@/components/Filters";
 import { getWishlistKeys, wishlistKey } from "@/lib/wishlist";
+import { getUsdToEur } from "@/lib/fx";
 import type { Deal } from "@/lib/types";
 
 const PAGE_SIZE = 24;
@@ -60,9 +61,10 @@ export async function DealResults({ values }: { values: FilterValues }) {
   }
 
   const from = (page - 1) * PAGE_SIZE;
-  const [{ data, count, error }, { data: auth }] = await Promise.all([
+  const [{ data, count, error }, { data: auth }, eurRate] = await Promise.all([
     query.order("id").range(from, from + PAGE_SIZE - 1),
     supabase.auth.getUser(),
+    getUsdToEur(),
   ]);
   const deals = (data ?? []) as Deal[];
   const total = count ?? 0;
@@ -151,6 +153,7 @@ export async function DealResults({ values }: { values: FilterValues }) {
               deal={deal}
               userId={userId}
               inWishlist={wishlistKeys.has(wishlistKey(deal.title, deal.platform))}
+              eurRate={eurRate}
             />
           ))}
         </div>

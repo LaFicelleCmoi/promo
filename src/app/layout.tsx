@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: "Promo Tracker — les promos jeux vidéo, toutes plateformes",
   description:
     "Suis les prix et promos jeux vidéo sur Steam, PlayStation, Xbox, Nintendo eShop, Epic et GOG. Historique, wishlist et alertes de prix.",

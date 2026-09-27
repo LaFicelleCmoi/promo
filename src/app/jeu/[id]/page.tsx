@@ -9,6 +9,7 @@ import { PLATFORM_LABELS, type Deal } from "@/lib/types";
 import { PriceHistoryChart, type PricePoint } from "@/components/PriceHistoryChart";
 import { WishlistButton } from "@/components/WishlistButton";
 import { ShareButton } from "@/components/ShareButton";
+import { GameImage } from "@/components/GameImage";
 import { NoTransactionNotice } from "@/components/NoTransactionNotice";
 
 type Params = Promise<{ id: string }>;
@@ -121,12 +122,7 @@ export default async function DealPage({ params }: { params: Params }) {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-x-8">
         <div className="order-1 min-w-0 lg:col-start-1 lg:row-start-1">
           <div className="card relative aspect-[460/215] overflow-hidden">
-            {deal.image_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={deal.image_url} alt="" className="h-full w-full object-cover" />
-            ) : (
-              <div className="flex h-full items-center justify-center text-sm text-muted">Pas d&apos;image</div>
-            )}
+            <GameImage src={deal.image_url} loading="eager" className="h-full w-full object-cover" />
           </div>
         </div>
 
@@ -138,7 +134,10 @@ export default async function DealPage({ params }: { params: Params }) {
               </h2>
               {points.length > 0 && (
                 <p className="text-xs text-muted">
-                  {stable ? `Prix stable sur ${points.length} relevés` : `${points.length} relevé${points.length > 1 ? "s" : ""}`} · plus bas observé{" "}
+                  {stable
+                    ? `Prix stable sur ${points.length} relevés`
+                    : `${points.length} relevé${points.length > 1 ? "s" : ""}`}{" "}
+                  · plus bas observé{" "}
                   <span className="font-semibold text-slate-200">{formatPrice(lowest, deal.currency)}</span>
                 </p>
               )}

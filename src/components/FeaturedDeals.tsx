@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
 import { PLATFORM_LABELS, type Deal } from "@/lib/types";
+import { StoreBadge, StoreDot } from "@/components/StoreBadge";
 
 /** Panneau « À la une » du hero : la meilleure promo de chaque grande boutique. */
 export function FeaturedDeals({ deals, total }: { deals: Deal[]; total: number }) {
@@ -43,6 +44,7 @@ export function FeaturedDeals({ deals, total }: { deals: Deal[]; total: number }
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-semibold text-white group-hover:text-accent">{deal.title}</p>
                   <p className="mt-0.5 truncate text-xs text-muted">
+                    <StoreDot store={deal.store} className="mr-1.5 align-middle" />
                     {PLATFORM_LABELS[deal.platform]} · {deal.store}
                   </p>
                 </div>

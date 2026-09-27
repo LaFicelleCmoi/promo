@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "@/components/Toaster";
 
 /** Partage natif sur mobile, sinon copie du lien dans le presse-papiers. */
 export function ShareButton({ title }: { title: string }) {
@@ -15,6 +16,7 @@ export function ShareButton({ title }: { title: string }) {
       }
       await navigator.clipboard.writeText(url);
       setCopied(true);
+      toast("Lien copié dans le presse-papiers");
       setTimeout(() => setCopied(false), 2000);
     } catch {
       // Partage annulé par l'utilisateur : rien à faire.

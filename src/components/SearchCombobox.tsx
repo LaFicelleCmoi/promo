@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { SearchHit } from "@/app/api/search/route";
 import { PLATFORM_LABELS, isPlatform } from "@/lib/types";
+import { StoreBadge, StoreDot } from "@/components/StoreBadge";
 
 type Props = {
   /** « navigate » : ouvre la fiche jeu ; « select » : remplit un formulaire (wishlist). */
@@ -204,6 +205,7 @@ export function SearchCombobox({
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-white">{hit.title}</p>
                     <p className="truncate text-xs text-muted">
+                      <StoreDot store={hit.store} className="mr-1.5 align-middle" />
                       {isPlatform(hit.platform) ? PLATFORM_LABELS[hit.platform] : hit.platform} · {hit.store}
                     </p>
                   </div>

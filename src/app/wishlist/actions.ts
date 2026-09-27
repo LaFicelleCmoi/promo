@@ -101,3 +101,15 @@ export async function removeFromWishlist(formData: FormData) {
   await supabase.from("wishlist").delete().eq("id", id);
   revalidatePath("/wishlist");
 }
+
+export async function updateTargetPrice(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  const raw = String(formData.get("target_price") ?? "")
+    .trim()
+    .replace(",", ".");
+  const target = raw === "" ? null : Number(raw);
+  if (target !== null && (!Number.isFinite(target) || target < 0)) return;
+  const supabase = await createClient();
+  await supabase.from("wishlist").update({ target_price: target }).eq("id", id);
+  revalidatePath("/wishlist");
+}

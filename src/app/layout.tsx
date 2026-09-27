@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Header } from "@/components/Header";
+import { Toaster } from "@/components/Toaster";
+import { BackToTop } from "@/components/BackToTop";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -33,6 +35,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             communauté. Prix indicatifs relevés chaque jour, vérifie sur la boutique avant d&apos;acheter.
           </p>
         </footer>
+        <Toaster />
+        <BackToTop />
       </body>
     </html>
   );

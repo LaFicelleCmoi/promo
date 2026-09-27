@@ -11,6 +11,7 @@ import { WishlistButton } from "@/components/WishlistButton";
 import { ShareButton } from "@/components/ShareButton";
 import { GameImage } from "@/components/GameImage";
 import { getUsdToEur } from "@/lib/fx";
+import { RecentlyViewedTracker } from "@/components/RecentlyViewed";
 import { NoTransactionNotice } from "@/components/NoTransactionNotice";
 import { StoreBadge, StoreDot } from "@/components/StoreBadge";
 import { storeTheme } from "@/lib/stores";
@@ -111,6 +112,17 @@ export default async function DealPage({ params }: { params: Params }) {
 
   return (
     <div className="space-y-8">
+      <RecentlyViewedTracker
+        game={{
+          id: deal.id,
+          title: deal.title,
+          image: deal.image_url,
+          store: deal.store,
+          price: deal.sale_price,
+          currency: deal.currency,
+          discount: deal.discount,
+        }}
+      />
       <nav aria-label="Fil d'Ariane" className="flex flex-wrap items-center gap-1.5 text-sm text-muted">
         <Link href="/" className="hover:text-white">
           Promos

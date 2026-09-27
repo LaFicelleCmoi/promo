@@ -5,6 +5,7 @@ import { isPlatform } from "@/lib/types";
 import { Hero } from "@/components/Hero";
 import { DealResults, ResultsSkeleton } from "@/components/DealResults";
 import { LastChanceRail } from "@/components/LastChanceRail";
+import { RecentlyViewedRail } from "@/components/RecentlyViewed";
 
 type SearchParams = Promise<FilterValues>;
 
@@ -33,9 +34,12 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
 
       {/* Rangée « Dernière chance » seulement sur la vue d'accueil, sans filtre. */}
       {Object.values(params).every((v) => !v) && (
-        <Suspense fallback={null}>
-          <LastChanceRail />
-        </Suspense>
+        <>
+          <RecentlyViewedRail />
+          <Suspense fallback={null}>
+            <LastChanceRail />
+          </Suspense>
+        </>
       )}
 
       <Filters values={values} stores={stores} platformCounts={platformCounts} />

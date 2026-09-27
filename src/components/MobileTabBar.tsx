@@ -54,7 +54,7 @@ function Icon({ name }: { name: keyof typeof icons }) {
 }
 
 /** Barre d'onglets fixe en bas de l'écran sur mobile. */
-export function MobileTabBar({ loggedIn }: { loggedIn: boolean }) {
+export function MobileTabBar({ loggedIn, wishlistCount = 0 }: { loggedIn: boolean; wishlistCount?: number }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const free = searchParams.get("free") === "1";
@@ -96,7 +96,14 @@ export function MobileTabBar({ loggedIn }: { loggedIn: boolean }) {
         </button>
         {tabs.slice(2).map((t) => (
           <Link key={t.href} href={t.href} aria-current={t.active ? "page" : undefined} className={cls(t.active)}>
-            <Icon name={t.icon} />
+            <span className="relative">
+              <Icon name={t.icon} />
+              {t.icon === "heart" && wishlistCount > 0 && (
+                <span className="absolute -top-1.5 -right-2.5 min-w-4 rounded-full bg-pink-500 px-1 text-center text-[9px] leading-4 font-bold text-white tabular-nums">
+                  {wishlistCount > 99 ? "99+" : wishlistCount}
+                </span>
+              )}
+            </span>
             {t.label}
           </Link>
         ))}

@@ -3,6 +3,7 @@
 import { useOptimistic, useState, useTransition } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { toggleWishlist } from "@/app/wishlist/actions";
+import { toast } from "@/components/Toaster";
 
 type Props = {
   title: string;
@@ -31,7 +32,14 @@ export function WishlistButton({ title, platform, initial, loggedIn, variant = "
       setOptimistic(!saved);
       const result = await toggleWishlist(title, platform);
       if (result.error === "login") return router.push(`/login?next=${encodeURIComponent(pathname)}`);
-      if (result.error) setError(true);
+      if (result.error) {
+        setError(true);
+        toast("Impossible de mettre à jour ta wishlist, réessaie.", { tone: "error" });
+      } else if (result.inWishlist) {
+        toast("Ajouté à ta wishlist", { action: { label: "Voir", href: "/wishlist" } });
+      } else {
+        toast("Retiré de ta wishlist", { tone: "info" });
+      }
       setSaved(result.inWishlist);
     });
   }

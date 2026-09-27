@@ -19,11 +19,11 @@ export type FilterValues = {
 
 type Props = { values: FilterValues; stores: string[]; platformCounts: Record<string, number> };
 
-const SORTS = [
-  { value: "discount", label: "Plus grosse réduction" },
+export const SORTS = [
+  { value: "discount", label: "Réduction" },
   { value: "price", label: "Prix croissant" },
-  { value: "recent", label: "Plus récentes" },
-  { value: "ending", label: "Se terminent bientôt" },
+  { value: "ending", label: "Fin proche" },
+  { value: "recent", label: "Nouveautés" },
 ];
 
 export function hrefWith(values: FilterValues, patch: Partial<FilterValues>) {
@@ -63,8 +63,9 @@ export function Filters({ values, stores, platformCounts }: Props) {
       <FiltersToggle activeCount={activeCount}>
         <FilterForm key={JSON.stringify(values)} className="card grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-6">
           {values.platform && <input type="hidden" name="platform" value={values.platform} />}
+          {values.sort && <input type="hidden" name="sort" value={values.sort} />}
 
-          <div className="lg:col-span-2">
+          <div className="sm:col-span-2 lg:col-span-3">
             <label htmlFor="q" className="label">
               Rechercher un jeu
             </label>
@@ -113,19 +114,6 @@ export function Filters({ values, stores, platformCounts }: Props) {
               placeholder="20"
               className="input"
             />
-          </div>
-
-          <div>
-            <label htmlFor="sort" className="label">
-              Trier par
-            </label>
-            <select id="sort" name="sort" defaultValue={values.sort ?? "discount"} className="input">
-              {SORTS.map((s) => (
-                <option key={s.value} value={s.value}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
           </div>
 
           <div className="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between lg:col-span-6">

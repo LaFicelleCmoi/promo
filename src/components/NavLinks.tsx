@@ -3,7 +3,20 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
-export type NavLink = { href: string; label: string };
+export type NavLink = { href: string; label: string; badge?: number };
+
+/** Compteur (ex. nombre de jeux en wishlist) affiché à côté d'un lien. */
+export function CountBadge({ n, className = "" }: { n?: number; className?: string }) {
+  if (!n) return null;
+  return (
+    <span
+      aria-label={`${n} jeu${n > 1 ? "x" : ""}`}
+      className={`inline-flex min-w-5 items-center justify-center rounded-full bg-pink-500/15 px-1.5 text-[10px] leading-5 font-bold text-pink-300 tabular-nums ${className}`}
+    >
+      {n > 99 ? "99+" : n}
+    </span>
+  );
+}
 
 /** Un lien est actif si son chemin ET ses paramètres correspondent à la page courante. */
 export function useIsActive() {
@@ -38,6 +51,7 @@ export function NavLinks({ links }: { links: NavLink[] }) {
             }`}
           >
             {l.label}
+            <CountBadge n={l.badge} className="ml-1.5" />
           </Link>
         );
       })}

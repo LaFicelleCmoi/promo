@@ -39,13 +39,19 @@ const NOISE = new Set([
 
 /** Mots-clés significatifs d'un titre, pour retrouver le même jeu sur d'autres boutiques. */
 export function titleKeywords(title: string, max = 4) {
-  return title
-    .toLowerCase()
-    .replace(/[™®©]/g, " ")
-    .replace(/[^\p{L}\p{N}]+/gu, " ")
-    .split(" ")
-    .filter((w) => w.length >= 2 && !NOISE.has(w))
-    .slice(0, max);
+  return (
+    title
+      .toLowerCase()
+      .replace(/[™®©]/g, " ")
+      .replace(/\bps[345]\b/g, " ")
+      // « fc26 » → « fc 26 » : sinon « FC26 » ne ressemble pas à « EA SPORTS FC™ 26 ».
+      .replace(/(\p{L})(\p{N})/gu, "$1 $2")
+      .replace(/(\p{N})(\p{L})/gu, "$1 $2")
+      .replace(/[^\p{L}\p{N}]+/gu, " ")
+      .split(" ")
+      .filter((w) => (w.length >= 2 || /^\d$/.test(w)) && !NOISE.has(w))
+      .slice(0, max)
+  );
 }
 
 /** Ressemblance entre deux titres (indice de Jaccard sur les mots-clés), de 0 à 1. */

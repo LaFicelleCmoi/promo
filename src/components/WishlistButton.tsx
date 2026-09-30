@@ -36,7 +36,11 @@ export function WishlistButton({ title, platform, initial, loggedIn, variant = "
         setError(true);
         toast("Impossible de mettre à jour ta wishlist, réessaie.", { tone: "error" });
       } else if (result.inWishlist) {
-        toast("Ajouté à ta wishlist", { action: { label: "Voir", href: "/wishlist" } });
+        // Notifications pas encore autorisées sur cet appareil : on propose de les activer.
+        const canAsk = typeof Notification !== "undefined" && Notification.permission === "default";
+        toast(canAsk ? "Ajouté ! Active les notifications pour être prévenu." : "Ajouté à ta wishlist", {
+          action: canAsk ? { label: "Activer", href: "/wishlist#notifications" } : { label: "Voir", href: "/wishlist" },
+        });
       } else {
         toast("Retiré de ta wishlist", { tone: "info" });
       }
@@ -83,7 +87,7 @@ export function WishlistButton({ title, platform, initial, loggedIn, variant = "
           {error
             ? "Oups, réessaie dans un instant."
             : optimistic
-              ? "Tu seras alerté quand le prix baisse."
+              ? "Tu recevras une notification quand le prix baisse."
               : !loggedIn
                 ? "Connexion requise pour suivre un jeu."
                 : ""}

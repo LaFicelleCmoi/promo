@@ -148,7 +148,7 @@ export function WishlistItemCard({ item, deals, art }: Props) {
                     className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all ${item.notify ? "left-[18px]" : "left-0.5"}`}
                   />
                 </span>
-                Alerte email
+                Notification
               </button>
             </form>
           </div>

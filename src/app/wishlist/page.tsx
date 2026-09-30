@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { WishlistForm } from "@/components/WishlistForm";
 import { WishlistItemCard } from "@/components/WishlistItemCard";
 import { NoTransactionNotice } from "@/components/NoTransactionNotice";
+import { PushToggle } from "@/components/PushToggle";
 import { findGameArt } from "@/lib/gameArt";
 import type { Deal, WishlistItem } from "@/lib/types";
 
@@ -74,7 +75,7 @@ async function WishlistList() {
   const stats = [
     { label: "jeux suivis", value: wishlist.length },
     { label: "en promo maintenant", value: onSale, highlight: onSale > 0 },
-    { label: "alertes email actives", value: alerts },
+    { label: "alertes actives", value: alerts },
   ];
 
   return (
@@ -134,9 +135,11 @@ export default async function WishlistPage() {
         <h1 className="text-2xl font-bold sm:text-3xl">Ma wishlist</h1>
         <p className="mt-1 max-w-3xl text-sm text-muted">
           Ajoute les jeux que tu attends : dès qu&apos;une promo correspond (et passe sous ton prix cible), elle
-          apparaît ici et tu reçois un email.
+          apparaît ici et tu reçois une notification.
         </p>
       </div>
+
+      <PushToggle />
 
       <WishlistForm />
       <NoTransactionNotice compact />

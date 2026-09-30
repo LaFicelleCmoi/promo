@@ -7,7 +7,7 @@ import { fetchSteamDeals } from "@/lib/sources/steam";
 import { fetchGogDeals } from "@/lib/sources/gog";
 import { fetchPlayStationDeals } from "@/lib/sources/playstation";
 import { fetchXboxDeals } from "@/lib/sources/xbox";
-import { sendWishlistAlerts } from "@/lib/email/alerts";
+import { sendWishlistNotifications } from "@/lib/push/alerts";
 import type { DealInput, DealSource } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -63,11 +63,12 @@ export async function GET(request: NextRequest) {
     older_than: startedAt,
   });
 
-  let emails: number | string;
+  // Notifications système (Web Push) des promos de la wishlist.
+  let notifications: number | string;
   try {
-    emails = await sendWishlistAlerts(supabase);
+    notifications = await sendWishlistNotifications(supabase);
   } catch (err) {
-    emails = `erreur : ${err instanceof Error ? err.message : String(err)}`;
+    notifications = `erreur : ${err instanceof Error ? err.message : String(err)}`;
   }
 
   return NextResponse.json({
@@ -75,7 +76,7 @@ export async function GET(request: NextRequest) {
     report,
     priceHistory: historyError ? historyError.message : priceRecords,
     purged: error ? error.message : purged,
-    emails,
+    notifications,
   });
 }
 

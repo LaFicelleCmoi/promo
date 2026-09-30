@@ -11,7 +11,7 @@ connexion / inscription, wishlist et prix cibles.
 | Langage       | TypeScript                                                             |
 | UI            | Tailwind CSS v4                                                        |
 | Base + Auth   | [Supabase](https://supabase.com) (Postgres, Auth email/mot de passe, RLS) |
-| Emails        | [Resend](https://resend.com) — clé API « Promo Tracker »               |
+| Notifications | Web Push (service worker + clés VAPID), sans email                     |
 | Hébergement   | Vercel (+ Vercel Cron pour la synchro quotidienne)                     |
 
 ## Sources des prix
@@ -63,7 +63,7 @@ neutre : la couleur ne porte jamais seule l'information.
 - Inscription (pseudo, email, mot de passe) avec confirmation par email, connexion, déconnexion.
 - Wishlist : jeux à surveiller, plateforme et prix cible optionnels ; les promos correspondantes s'affichent.
 - Ajout d'une promo à la wishlist en un clic, partage de promos communautaires (suppression par l'auteur).
-- Alertes email (Resend) quand une promo correspond à un jeu de la wishlist, activables jeu par jeu.
+- Notifications système quand une promo correspond à un jeu de la wishlist, activables jeu par jeu.
 - Suivi quotidien des prix sur Steam, PlayStation, Xbox, eShop, Epic et GOG, avec historique et plus bas prix.
 - Synchro automatique quotidienne (`/api/sync`) + purge des promos expirées.
 
@@ -94,41 +94,22 @@ neutre : la couleur ne porte jamais seule l'information.
    curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/sync
    ```
 
-## Emails
+## Notifications
 
-> **Inscription sans email** : par défaut, le compte est créé côté serveur déjà confirmé
-> (`REQUIRE_EMAIL_CONFIRMATION` absent ou `false`). L'inscription fonctionne donc avec n'importe quelle adresse,
-> même sans service d'email. Mets `REQUIRE_EMAIL_CONFIRMATION=true` pour exiger la confirmation par email.
+Les alertes de la wishlist sont des **notifications système** (Web Push), sans email : elles s'affichent sur le
+téléphone ou l'ordinateur, même site fermé, pour tous les utilisateurs.
 
-Deux envois d'emails : la **confirmation d'inscription** (envoyée par Supabase Auth) et les **alertes de wishlist**
-(envoyées par `/api/sync`). Les deux passent par le même compte.
+- L'utilisateur les active sur chaque appareil depuis **Ma wishlist → Activer les notifications** (bouton « Tester »
+  pour vérifier). Sur iPhone (iOS 16.4+), il faut d'abord ajouter le site à l'écran d'accueil.
+- Après chaque synchro, `/api/sync` envoie une notification par utilisateur pour les promos pas encore signalées
+  (une promo = une seule fois ; le clic ouvre la fiche du jeu ou la wishlist).
+- Les abonnements (un par appareil) sont rangés dans `app_metadata.push_subscriptions` du compte Supabase, modifiables
+  uniquement côté serveur ; les abonnements expirés sont supprimés automatiquement.
+- Variables : `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (clés générées avec
+  `npx web-push generate-vapid-keys`).
 
-### Option 1 — Gmail (gratuit, sans domaine)
-
-1. Crée une adresse Gmail dédiée (ex. `promotracker.alertes@gmail.com`).
-2. Active la validation en 2 étapes, puis crée un mot de passe d'application :
-   <https://myaccount.google.com/apppasswords>.
-3. Variables d'environnement (Vercel + `.env.local`) :
-
-   ```
-   SMTP_HOST=smtp.gmail.com
-   SMTP_PORT=465
-   SMTP_USER=promotracker.alertes@gmail.com
-   SMTP_PASS=<mot de passe d'application>
-   EMAIL_FROM=Promo Tracker <promotracker.alertes@gmail.com>
-   ```
-
-4. Supabase → *Authentication → Emails → SMTP Settings* : host `smtp.gmail.com`, port `465`, username = l'adresse
-   Gmail, password = le mot de passe d'application, sender email = l'adresse Gmail, sender name `Promo Tracker`.
-
-Limite Gmail : environ 500 emails par jour.
-
-### Option 2 — Resend (avec un domaine)
-
-Utilisée si `SMTP_USER`/`SMTP_PASS` sont vides : `RESEND_API_KEY` (clé « Promo Tracker »). Sans domaine vérifié sur
-Resend, l'expéditeur `onboarding@resend.dev` ne peut écrire **qu'à l'adresse du compte Resend** : ajoute ton domaine
-dans *Resend → Domains* pour écrire à tous les utilisateurs. Côté Supabase : host `smtp.resend.com`, port `465`,
-username `resend` (en minuscules), password = la clé API.
+**Inscription sans email** : le compte est créé côté serveur déjà confirmé (`REQUIRE_EMAIL_CONFIRMATION` absent ou
+`false`), l'inscription fonctionne donc avec n'importe quelle adresse.
 
 ## Déploiement (Vercel)
 
@@ -149,7 +130,7 @@ src/
   components/             Header, DealCard, Filters, formulaires
   lib/
     sources/              connecteurs Steam, PlayStation, Xbox, Nintendo, Epic, GOG, CheapShark
-    email/                alertes wishlist et template d'email (Resend)
+    push/                 notifications système (Web Push) des alertes wishlist
     supabase/             clients serveur, admin et proxy (session)
   proxy.ts                rafraîchit la session et protège les pages privées
 supabase/migrations/      schéma SQL + RLS

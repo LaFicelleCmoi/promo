@@ -67,7 +67,7 @@ export function WishlistForm() {
       </button>
       <label className="flex items-center gap-2 text-sm text-slate-300 sm:col-span-4">
         <input type="checkbox" name="notify" defaultChecked className="accent-accent" />
-        M&apos;alerter par email quand une promo correspond
+        M&apos;envoyer une notification quand une promo correspond
       </label>
       {state?.error && (
         <p role="alert" className="text-sm text-danger sm:col-span-4">

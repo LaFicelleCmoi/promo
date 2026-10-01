@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LineSidebar from "@/components/reactbits/LineSidebar";
 
 export const LEGAL_UPDATED = "1er octobre 2026";
 export const CONTACT_DISCORD = "LaFicelleCmoi";
@@ -51,21 +52,26 @@ export function LegalPage({
         <div className="mt-4 max-w-3xl text-slate-300">{intro}</div>
       </header>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)]">
+      <div className="mt-8 grid gap-8 lg:grid-cols-[270px_minmax(0,1fr)] lg:gap-10">
         <aside className="hidden lg:block">
-          <nav aria-label="Sommaire" className="sticky top-24">
-            <p className="label">Sommaire</p>
-            <ol className="mt-2 space-y-1.5 text-sm">
-              {sections.map((s, i) => (
-                <li key={s.id}>
-                  <a href={`#${s.id}`} className="text-muted hover:text-white">
-                    {i + 1}. {s.title}
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </nav>
+          <div className="sticky top-24">
+            <LineSidebar items={sections.map((s) => ({ id: s.id, label: s.title }))} />
+          </div>
         </aside>
+
+        <details className="card p-4 lg:hidden">
+          <summary className="cursor-pointer text-sm font-semibold text-white">Sommaire</summary>
+          <ol className="mt-3 space-y-2 text-sm">
+            {sections.map((s, i) => (
+              <li key={s.id}>
+                <a href={`#${s.id}`} className="text-muted hover:text-white">
+                  <span className="mr-2 font-mono text-xs text-accent">{String(i + 1).padStart(2, "0")}</span>
+                  {s.title}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </details>
 
         <div className="legal space-y-8">
           {sections.map((s, i) => (

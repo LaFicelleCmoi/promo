@@ -1,3 +1,5 @@
+import type { Platform } from "@/lib/types";
+
 /**
  * Gamme de couleurs par boutique.
  *
@@ -51,44 +53,12 @@ const THEMES: (StoreTheme & { match: RegExp })[] = [
   },
   { key: "gog", label: "GOG", match: /\bgog\b/i, color: "#e864e0", button: "#86328a", buttonText: "#ffffff" },
   {
-    key: "humble",
-    label: "Humble Store",
-    match: /humble/i,
-    color: "#ff8a65",
-    button: "#cc2929",
-    buttonText: "#ffffff",
-  },
-  {
-    key: "fanatical",
-    label: "Fanatical",
-    match: /fanatical/i,
-    color: "#ffb347",
-    button: "#ffb347",
-    buttonText: "#1a1000",
-  },
-  {
-    key: "gmg",
-    label: "GreenManGaming",
-    match: /green\s?man/i,
-    color: "#34d399",
-    button: "#34d399",
-    buttonText: "#03271a",
-  },
-  {
     key: "ubisoft",
     label: "Ubisoft Connect",
     match: /ubisoft|uplay/i,
     color: "#fde047",
     button: "#2563eb",
     buttonText: "#ffffff",
-  },
-  {
-    key: "instant",
-    label: "Instant Gaming",
-    match: /instant.?gaming/i,
-    color: "#ff8c42",
-    button: "#ff8c42",
-    buttonText: "#1a0a00",
   },
   {
     key: "googleplay",
@@ -104,14 +74,6 @@ const THEMES: (StoreTheme & { match: RegExp })[] = [
     match: /app\s?store|apple/i,
     color: "#2f9bff",
     button: "#0a66d9",
-    buttonText: "#ffffff",
-  },
-  {
-    key: "indiegala",
-    label: "IndieGala",
-    match: /indiegala/i,
-    color: "#f87171",
-    button: "#dc2626",
     buttonText: "#ffffff",
   },
 ];
@@ -133,3 +95,35 @@ export function storeTheme(store: string): StoreTheme {
 export const MAIN_STORES = ["steam", "playstation", "xbox", "nintendo", "epic", "gog", "ubisoft"].map((key) =>
   THEMES.find((t) => t.key === key)!,
 );
+
+/** Seules boutiques acceptées sur le site : les 7 principales + Google Play et App Store (jeux mobiles). */
+export const OFFICIAL_STORES = [...MAIN_STORES.map((t) => t.label), "Google Play", "App Store"];
+
+/** Vrai si le nom correspond à une boutique officielle (ex. « PlayStation Store (PS5) »). */
+export function isOfficialStore(store: string) {
+  const key = storeTheme(store).key;
+  return [...MAIN_STORES.map((t) => t.key), "googleplay", "appstore"].includes(key);
+}
+
+const STORE_HOSTS: { match: RegExp; store: string; platform?: Platform }[] = [
+  { match: /(^|\.)steampowered\.com$/, store: "Steam", platform: "pc" },
+  { match: /(^|\.)playstation\.com$/, store: "PlayStation Store", platform: "playstation" },
+  { match: /(^|\.)(xbox|microsoft)\.com$/, store: "Xbox Store", platform: "xbox" },
+  { match: /(^|\.)nintendo\.(com|fr|co\.uk|de|es|it|be|ch)$/, store: "Nintendo eShop", platform: "switch" },
+  { match: /(^|\.)epicgames\.com$/, store: "Epic Games Store", platform: "pc" },
+  { match: /(^|\.)gog\.com$/, store: "GOG", platform: "pc" },
+  { match: /(^|\.)ubisoft\.com$/, store: "Ubisoft Connect", platform: "pc" },
+  { match: /^play\.google\.com$/, store: "Google Play", platform: "mobile" },
+  { match: /^apps\.apple\.com$/, store: "App Store", platform: "mobile" },
+];
+
+/** Boutique officielle reconnue à partir du lien d'une promo, ou null si le site n'en fait pas partie. */
+export function officialStoreFromUrl(url: string) {
+  try {
+    const { hostname, protocol } = new URL(url);
+    if (protocol !== "https:" && protocol !== "http:") return null;
+    return STORE_HOSTS.find((s) => s.match.test(hostname.replace(/^www\./, ""))) ?? null;
+  } catch {
+    return null;
+  }
+}

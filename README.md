@@ -131,6 +131,18 @@ téléphone ou l'ordinateur, même site fermé, pour tous les utilisateurs.
 
 Réglages, journal et dernier rapport de synchro sont rangés en JSON dans le bucket privé `config` de Supabase Storage (aucune table supplémentaire).
 
+## Extension Chrome
+
+Le dossier [`extension/`](extension) contient l'extension (Manifest V3, sans dépendance ni étape de compilation) :
+
+- sur la page d'un jeu des 9 boutiques officielles, un panneau affiche le meilleur prix suivi, le plus bas prix
+  observé, les autres offres et un bouton « Suivre ce jeu » (wishlist) ;
+- l'icône affiche la réduction du jeu ouvert, et son menu la wishlist en promo et les promos du moment.
+
+Elle appelle `/api/extension/lookup`, `/api/extension/wishlist` et `/api/extension/popup` avec la session du site
+(cookies), via son service worker. `npm run extension:build` régénère les icônes et l'archive
+`public/promo-tracker-extension.zip`, téléchargeable sur la page `/extension`.
+
 ## Déploiement (Vercel)
 
 Importe le repo sur Vercel, ajoute les variables de `.env.example` (avec `NEXT_PUBLIC_SITE_URL` = URL de prod).

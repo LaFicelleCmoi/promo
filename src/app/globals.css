@@ -122,3 +122,20 @@
     display: none;
   }
 }
+
+/* Pages légales : listes et liens lisibles dans le texte courant. */
+.legal ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.legal ul > li + li {
+  margin-top: 0.35rem;
+}
+.legal a:not(.btn) {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.legal strong {
+  color: #fff;
+}

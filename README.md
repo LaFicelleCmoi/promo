@@ -26,6 +26,7 @@ Les prix sont relevés chaque jour directement sur les boutiques officielles :
 | Nintendo eShop     | Switch          | EUR    | API de recherche Nintendo Europe          |
 | Epic Games Store   | PC              | EUR    | jeux gratuits / promos mises en avant     |
 | GOG                | PC              | EUR    | API catalogue GOG                         |
+| Ubisoft Connect    | PC              | EUR    | catalogue du Ubisoft Store (index Algolia public) |
 | CheapShark         | PC              | USD    | autres revendeurs (Humble, Fanatical…)    |
 | Google Play        | Mobile          | EUR    | r/googleplaydeals + vérification Google Play |
 | App Store          | Mobile          | EUR    | r/AppHookup + API iTunes d'Apple          |
@@ -53,9 +54,10 @@ badges, le liseré des cartes et le bouton « Voir sur … ».
 | Nintendo eShop    | `#ff6060` | `#e60012` / blanc       |
 | Epic Games Store  | `#f4f4f5` | `#f4f4f5` / `#111111`   |
 | GOG               | `#e864e0` | `#86328a` / blanc       |
-| Humble, Fanatical, GMG, Ubisoft, Instant Gaming, IndieGala | teintes propres | — |
+| Ubisoft Connect   | `#fde047` | `#2563eb` / blanc       |
+| Humble, Fanatical, GMG, Instant Gaming, IndieGala | teintes propres | — |
 
-Les repères sont vérifiés sur fond sombre : contraste ≥ 4,5:1, écart ΔE ≥ 18 entre les 6 boutiques principales en
+Les repères sont vérifiés sur fond sombre : contraste ≥ 4,5:1, écart ΔE ≥ 18 entre les 7 boutiques principales en
 vision normale (≥ 6 en daltonisme, toléré car le nom de la boutique est toujours écrit). Le texte des badges reste
 neutre : la couleur ne porte jamais seule l'information.
 
@@ -66,7 +68,7 @@ neutre : la couleur ne porte jamais seule l'information.
 - Wishlist : jeux à surveiller, plateforme et prix cible optionnels ; les promos correspondantes s'affichent.
 - Ajout d'une promo à la wishlist en un clic, partage de promos communautaires (suppression par l'auteur).
 - Notifications système quand une promo correspond à un jeu de la wishlist, activables jeu par jeu.
-- Suivi quotidien des prix sur Steam, PlayStation, Xbox, eShop, Epic et GOG, avec historique et plus bas prix.
+- Suivi quotidien des prix sur Steam, PlayStation, Xbox, eShop, Epic, GOG et Ubisoft Connect, avec historique et plus bas prix.
 - Synchro automatique quotidienne (`/api/sync`) + purge des promos expirées.
 
 ## Installation

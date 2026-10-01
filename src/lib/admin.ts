@@ -43,14 +43,20 @@ export async function countDealsBySource() {
   const admin = createAdminClient();
   const head = () => admin.from("deals").select("id", { count: "exact", head: true });
   const sources = ["steam", "playstation", "xbox", "nintendo", "epic", "gog", "cheapshark"] as const;
-  const [main, mobile, community] = await Promise.all([
-    Promise.all(sources.map((s) => head().eq("source", s))),
+  const [main, ubisoft, mobile, community] = await Promise.all([
+    Promise.all(
+      sources.map((s) =>
+        s === "cheapshark" ? head().eq("source", s).not("external_id", "like", "ubisoft:%") : head().eq("source", s),
+      ),
+    ),
+    head().eq("source", "cheapshark").like("external_id", "ubisoft:%"),
     head().eq("source", "community").or("external_id.like.android:*,external_id.like.ios:*"),
     head().eq("source", "community").not("external_id", "like", "android:%").not("external_id", "like", "ios:%"),
   ]);
   return {
     ...Object.fromEntries(sources.map((s, i) => [s, main[i].count ?? 0])),
+    ubisoft: ubisoft.count ?? 0,
     mobile: mobile.count ?? 0,
     community: community.count ?? 0,
-  } as Record<(typeof sources)[number] | "mobile" | "community", number>;
+  } as Record<(typeof sources)[number] | "ubisoft" | "mobile" | "community", number>;
 }

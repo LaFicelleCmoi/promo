@@ -102,7 +102,11 @@ export function MobileMenu({ links, userName, wishlistCount = 0 }: Props) {
             className="fixed inset-x-0 top-16 bottom-0 z-40 flex flex-col overflow-y-auto border-t border-border bg-bg px-4 pt-4 pb-[calc(6rem+env(safe-area-inset-bottom))]"
           >
             {userName ? (
-              <div className="card flex items-center gap-3 p-4">
+              <Link
+                href="/compte"
+                onClick={close}
+                className="card flex items-center gap-3 p-4 transition active:border-accent"
+              >
                 <span
                   aria-hidden
                   className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-pink-500 text-lg font-black text-white"
@@ -117,7 +121,8 @@ export function MobileMenu({ links, userName, wishlistCount = 0 }: Props) {
                       : "Aucun jeu suivi pour l'instant"}
                   </p>
                 </div>
-              </div>
+                <span className="ml-auto text-xs font-semibold text-accent">Mon compte ›</span>
+              </Link>
             ) : (
               <div className="card p-4">
                 <p className="font-bold text-white">Suis tes jeux préférés</p>

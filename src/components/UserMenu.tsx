@@ -13,10 +13,12 @@ export function UserMenu({
   name,
   avatar,
   wishlistCount = 0,
+  admin = false,
 }: {
   name: string;
   avatar: AvatarData;
   wishlistCount?: number;
+  admin?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -68,6 +70,28 @@ export function UserMenu({
           <p className="truncate border-b border-border px-4 py-2.5 text-xs text-muted">
             Connecté en tant que <span className="font-semibold text-slate-200">{name}</span>
           </p>
+          {admin && (
+            <Link
+              role="menuitem"
+              href="/admin"
+              className="flex items-center gap-2 border-b border-border px-4 py-2.5 text-sm font-semibold text-amber-300 hover:bg-amber-400/10"
+            >
+              <svg
+                aria-hidden
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              Panel admin
+            </Link>
+          )}
           <Link
             role="menuitem"
             href="/wishlist"

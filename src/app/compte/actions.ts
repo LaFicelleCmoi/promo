@@ -24,7 +24,12 @@ export async function deleteAccount(_prev: DeleteState, formData: FormData): Pro
   const { data } = await supabase.auth.getUser();
   if (!data.user) redirect("/login?next=/compte");
 
-  const { error } = await createAdminClient().auth.admin.deleteUser(data.user.id);
+  const admin = createAdminClient();
+  // Photo d'avatar : effacée avec le compte.
+  const { data: files } = await admin.storage.from("avatars").list(data.user.id);
+  if (files?.length) await admin.storage.from("avatars").remove(files.map((f) => `${data.user.id}/${f.name}`));
+
+  const { error } = await admin.auth.admin.deleteUser(data.user.id);
   if (error) return { error: "La suppression a échoué, réessaie dans un instant." };
 
   await supabase.auth.signOut();

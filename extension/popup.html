@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Promo Tracker</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <a class="logo" href="https://promo-rouge.vercel.app" target="_blank" rel="noopener"><b>Promo</b>Tracker</a>
+      <a class="open" href="https://promo-rouge.vercel.app" target="_blank" rel="noopener">Ouvrir le site ↗</a>
+    </header>
+
+    <form id="search" role="search">
+      <input id="q" type="search" placeholder="Rechercher un jeu…" aria-label="Rechercher un jeu" autocomplete="off" />
+    </form>
+
+    <section id="account" aria-live="polite"></section>
+    <section id="wishlist" hidden>
+      <h2>Ta wishlist en promo</h2>
+      <ul id="wishlist-list"></ul>
+    </section>
+    <section>
+      <h2>Promos du moment</h2>
+      <ul id="top">
+        <li class="skeleton"></li>
+        <li class="skeleton"></li>
+        <li class="skeleton"></li>
+      </ul>
+    </section>
+
+    <footer>
+      Aucun achat ici : les offres sont sur les boutiques officielles.<br />
+      Ouvre la page d'un jeu sur Steam, PlayStation, Xbox, Nintendo, Epic, GOG, Ubisoft, Google Play ou l'App Store pour
+      voir son meilleur prix.
+    </footer>
+    <script src="popup.js"></script>
+  </body>
+</html>

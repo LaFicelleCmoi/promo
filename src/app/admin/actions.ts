@@ -18,6 +18,7 @@ import { runFollowUp, runSync } from "@/lib/sync";
 import { SYNC_SOURCES, SYNC_SOURCE_LABELS, isSyncSource, type SyncSource } from "@/lib/sources/catalog";
 import { computeDiscount } from "@/lib/format";
 import { isPlatform } from "@/lib/types";
+import { isOfficialStore } from "@/lib/stores";
 
 type Result = { ok: boolean; message: string };
 export type AdminResult = Result | undefined;
@@ -284,7 +285,7 @@ export async function saveDealAction(_prev: AdminResult, formData: FormData): Pr
 
       if (!title || title.length > 200) return fail("Titre requis (200 caractères max).");
       if (!isPlatform(platform)) return fail("Plateforme invalide.");
-      if (!store || store.length > 80) return fail("Boutique requise (80 caractères max).");
+      if (!store || store.length > 80 || !isOfficialStore(store)) return fail("Choisis une boutique officielle.");
       if (!/^https?:\/\//i.test(url) || !safeUrl(url)) return fail("Lien de la promo invalide.");
       if (imageUrl && (!/^https?:\/\//i.test(imageUrl) || !safeUrl(imageUrl))) return fail("Lien de l'image invalide.");
       if (sale === null || Number.isNaN(sale)) return fail("Prix promo invalide.");

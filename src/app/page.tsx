@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { Filters, type FilterValues } from "@/components/Filters";
 import { isPlatform } from "@/lib/types";
+import { parseProfile } from "@/lib/profile";
 import { Hero } from "@/components/Hero";
 import { DealResults, ResultsSkeleton } from "@/components/DealResults";
 import { LastChanceRail } from "@/components/LastChanceRail";
@@ -13,6 +14,8 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
   const params = await searchParams;
   const platform = isPlatform(params.platform) ? params.platform : undefined;
   const supabase = await createClient();
+  const { data: auth } = await supabase.auth.getUser();
+  const favorites = auth.user ? parseProfile(auth.user.user_metadata).platforms : [];
 
   const { data: storeRows } = await supabase.from("deal_stores").select("store, platform, deals");
   const rows = (storeRows ?? []) as { store: string; platform: string; deals: number }[];
@@ -42,10 +45,10 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
         </>
       )}
 
-      <Filters values={values} stores={stores} platformCounts={platformCounts} />
+      <Filters values={values} stores={stores} platformCounts={platformCounts} favorites={favorites} />
 
       <Suspense key={resultsKey} fallback={<ResultsSkeleton />}>
-        <DealResults values={values} />
+        <DealResults values={values} favorites={favorites} />
       </Suspense>
     </div>
   );

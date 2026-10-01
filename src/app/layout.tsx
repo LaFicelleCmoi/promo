@@ -1,6 +1,12 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import type { Metadata, Viewport } from "next";
 import { Header } from "@/components/Header";
+import { AnnouncementBanner } from "@/components/AnnouncementBanner";
+import { MaintenancePage } from "@/components/MaintenancePage";
+import { getSettings } from "@/lib/settings";
+import { getUser } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
 import { Toaster } from "@/components/Toaster";
 import { BackToTop } from "@/components/BackToTop";
 import "./globals.css";
@@ -19,12 +25,33 @@ export const viewport: Viewport = {
   themeColor: "#0b0d12",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+// Pages accessibles pendant la maintenance (connexion des admins, mentions obligatoires).
+const OPEN_DURING_MAINTENANCE = ["/login", "/auth", "/mentions-legales", "/confidentialite", "/cgu"];
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const [settings, requestHeaders] = await Promise.all([getSettings(), headers()]);
+  const path = requestHeaders.get("x-pathname") ?? "/";
+  const maintenance =
+    settings.maintenance.enabled &&
+    !OPEN_DURING_MAINTENANCE.some((p) => path === p || path.startsWith(`${p}/`)) &&
+    !isAdmin(await getUser());
+  const { announcement } = settings;
+
   return (
     <html lang="fr">
       <body className="min-h-screen overflow-x-clip">
+        {announcement.enabled && announcement.message && (
+          <AnnouncementBanner
+            message={announcement.message}
+            tone={announcement.tone}
+            link={announcement.link}
+            linkLabel={announcement.linkLabel}
+          />
+        )}
         <Header />
-        <main className="mx-auto max-w-7xl px-4 py-5 sm:py-8">{children}</main>
+        <main className="mx-auto max-w-7xl px-4 py-5 sm:py-8">
+          {maintenance ? <MaintenancePage message={settings.maintenance.message} /> : children}
+        </main>
         <footer className="mx-auto max-w-7xl space-y-2 border-t border-border px-4 pt-6 pb-[calc(6rem+env(safe-area-inset-bottom))] text-xs text-muted md:pb-10">
           <p>
             <strong className="text-slate-300">Aucune transaction sur ce site.</strong> Promo Tracker est un comparateur

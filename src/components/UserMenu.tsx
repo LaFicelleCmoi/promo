@@ -73,6 +73,9 @@ export function UserMenu({ name, wishlistCount = 0 }: { name: string; wishlistCo
             Ma wishlist
             <CountBadge n={wishlistCount} />
           </Link>
+          <Link role="menuitem" href="/compte" className="block px-4 py-2.5 text-sm text-slate-200 hover:bg-surface-2">
+            Mon compte
+          </Link>
           <Link
             role="menuitem"
             href="/deals/new"

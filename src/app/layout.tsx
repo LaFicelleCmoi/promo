@@ -59,11 +59,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             Les achats se font uniquement sur les boutiques officielles.
           </p>
           <p>
-            Données : Steam, PlayStation Store, Xbox Store, Nintendo eShop, Epic Games Store, GOG, Ubisoft Connect, CheapShark, Google
-            Play et App Store (repérés via Reddit) et la communauté. Prix indicatifs relevés chaque jour, vérifie sur la
-            boutique avant d&apos;acheter.
+            Données : Steam, PlayStation Store, Xbox Store, Nintendo eShop, Epic Games Store, GOG, Ubisoft Connect,
+            CheapShark, Google Play et App Store (repérés via Reddit) et la communauté. Prix indicatifs relevés chaque
+            jour, vérifie sur la boutique avant d&apos;acheter.
           </p>
           <nav aria-label="Informations légales" className="flex flex-wrap gap-x-4 gap-y-1 pt-2">
+            <Link href="/extension" className="font-semibold text-slate-300 hover:text-white">
+              Extension Chrome
+            </Link>
             <Link href="/mentions-legales" className="hover:text-white">
               Mentions légales
             </Link>

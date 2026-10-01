@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getFreshSettings } from "@/lib/settings";
 
 export type AuthState = { error?: string; message?: string } | undefined;
 
@@ -24,7 +25,9 @@ export async function login(_prev: AuthState, formData: FormData): Promise<AuthS
       error:
         error.code === "email_not_confirmed"
           ? "Confirme ton adresse email avant de te connecter."
-          : "Email ou mot de passe incorrect.",
+          : error.code === "user_banned"
+            ? "Ce compte est suspendu. Contacte-nous sur Discord : LaFicelleCmoi."
+            : "Email ou mot de passe incorrect.",
     };
   }
 
@@ -42,6 +45,7 @@ export async function signup(_prev: AuthState, formData: FormData): Promise<Auth
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: "Adresse email invalide." };
   if (password.length < 8) return { error: "Le mot de passe doit faire au moins 8 caractères." };
   if (password !== confirm) return { error: "Les mots de passe ne correspondent pas." };
+  if (!(await getFreshSettings()).signupsOpen) return { error: "Les inscriptions sont temporairement fermées." };
   if (formData.get("terms") !== "on") {
     return { error: "Accepte les conditions d'utilisation et la politique de confidentialité pour créer ton compte." };
   }

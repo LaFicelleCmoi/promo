@@ -20,7 +20,7 @@ export const SYNC_SOURCE_LABELS: Record<SyncSource, string> = {
   epic: "Epic Games Store",
   gog: "GOG",
   ubisoft: "Ubisoft Connect",
-  cheapshark: "CheapShark (autres boutiques PC)",
+  cheapshark: "Epic Games Store, promos payantes (CheapShark)",
   mobile: "Mobile (Google Play et App Store)",
 };
 

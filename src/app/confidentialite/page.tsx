@@ -77,6 +77,11 @@ export default function ConfidentialitePage() {
                     "Exécution du service (CGU)",
                   ],
                   [
+                    "Profil : photo d'avatar (facultative), titre, bio, bannière, couleur et préférences d'affichage, plateformes favorites",
+                    "Personnaliser ton profil et l'affichage du site",
+                    "Exécution du service",
+                  ],
+                  [
                     "Wishlist : jeux suivis, plateforme, prix cible, préférence de notification",
                     "Afficher tes jeux et te prévenir des promos",
                     "Exécution du service",
@@ -109,7 +114,8 @@ export default function ConfidentialitePage() {
             <ul>
               <li>
                 <strong>Compte, wishlist et notifications</strong> : tant que le compte existe. Tout est effacé
-                immédiatement quand tu supprimes ton compte.
+                immédiatement quand tu supprimes ton compte, photo d'avatar comprise. Une ancienne photo est supprimée
+                dès que tu en envoies une nouvelle.
               </li>
               <li>
                 <strong>Promos proposées</strong> : jusqu&apos;à leur expiration ou leur suppression ; à la suppression
@@ -133,8 +139,8 @@ export default function ConfidentialitePage() {
               <p>Tes données ne sont ni vendues ni cédées. Elles sont traitées uniquement par :</p>
               <ul>
                 <li>
-                  <strong>Supabase</strong> : base de données et authentification, serveurs dans l&apos;Union européenne
-                  (Irlande).
+                  <strong>Supabase</strong> : base de données, authentification et stockage des photos d&apos;avatar,
+                  serveurs dans l&apos;Union européenne (Irlande).
                 </li>
                 <li>
                   <strong>Vercel</strong> : hébergement du site (États-Unis), encadré par le cadre de protection des

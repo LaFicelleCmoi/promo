@@ -39,6 +39,10 @@ export default async function AdminDealsPage({ searchParams }: { searchParams: P
     query = query.eq("source", "community").or("external_id.like.android:*,external_id.like.ios:*");
   } else if (params.source === "community") {
     query = query.eq("source", "community").not("external_id", "like", "android:%").not("external_id", "like", "ios:%");
+  } else if (params.source === "ubisoft") {
+    query = query.eq("source", "cheapshark").like("external_id", "ubisoft:%");
+  } else if (params.source === "cheapshark") {
+    query = query.eq("source", "cheapshark").not("external_id", "like", "ubisoft:%");
   } else if (isSyncSource(params.source)) {
     query = query.eq("source", params.source);
   }

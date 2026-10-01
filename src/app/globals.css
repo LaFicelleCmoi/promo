@@ -139,3 +139,74 @@
 .legal strong {
   color: #fff;
 }
+
+/* React Bits — LineSidebar : sommaire lumineux des pages légales. */
+.line-sidebar .ls-link {
+  color: color-mix(in srgb, var(--accent-color) calc(var(--effect, 0) * 100%), var(--text-color));
+  font-size: var(--font-size);
+  transform: translateX(calc(var(--effect, 0) * var(--max-shift)));
+}
+.line-sidebar .ls-link:hover {
+  color: #fff;
+}
+.line-sidebar .ls-link-active {
+  font-weight: 700;
+  background: linear-gradient(90deg, #ffffff, #c4b5fd 45%, #f9a8d4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 10px rgb(167 139 250 / 0.55));
+}
+.line-sidebar .ls-marker {
+  background-color: color-mix(in srgb, var(--accent-color) calc(var(--effect, 0) * 100%), var(--marker-color));
+  transform: translateY(-50%) scaleX(calc(0.5 + var(--effect, 0) * 0.5));
+}
+.line-sidebar .ls-marker-active {
+  height: 2px;
+  background: linear-gradient(90deg, #7c5cff, #f472b6);
+  box-shadow:
+    0 0 8px rgb(124 92 255 / 0.9),
+    0 0 18px rgb(244 114 182 / 0.45);
+}
+.line-sidebar .ls-fill {
+  background: linear-gradient(180deg, #7c5cff, #f472b6 60%, #22c55e);
+  box-shadow:
+    0 0 8px rgb(124 92 255 / 0.75),
+    0 0 20px rgb(244 114 182 / 0.35);
+  transition: height 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.line-sidebar .ls-comet {
+  background: radial-gradient(circle, #ffffff 0 30%, #f0abfc 55%, #7c5cff 100%);
+  box-shadow:
+    0 0 6px 2px rgb(255 255 255 / 0.9),
+    0 0 16px 4px rgb(167 139 250 / 0.85),
+    0 0 34px 10px rgb(244 114 182 / 0.45);
+  transition: top 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.line-sidebar .ls-comet::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 1px solid rgb(196 181 253 / 0.7);
+  animation: ls-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes ls-ping {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .line-sidebar .ls-fill,
+  .line-sidebar .ls-comet {
+    transition: none;
+  }
+  .line-sidebar .ls-comet::after {
+    animation: none;
+  }
+}

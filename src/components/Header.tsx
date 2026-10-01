@@ -8,11 +8,13 @@ import StarBorder from "@/components/reactbits/StarBorder";
 import { UserMenu } from "@/components/UserMenu";
 import { MobileTabBar } from "@/components/MobileTabBar";
 import { ACCENTS, parseProfile } from "@/lib/profile";
+import { isAdmin } from "@/lib/admin";
 
 export async function Header() {
   const user = await getUser();
   const profile = user ? parseProfile(user.user_metadata, user.email?.split("@")[0]) : null;
   const name = profile?.username ?? null;
+  const admin = isAdmin(user);
 
   // Personnalisation du compte appliquée à tout le site, rendue côté serveur (pas de clignotement).
   const themeCss = profile
@@ -71,7 +73,12 @@ export async function Header() {
           <div className="ml-auto hidden items-center gap-3 md:flex">
             <SearchTrigger />
             {user ? (
-              <UserMenu name={name ?? "Mon compte"} avatar={profile!.avatar} wishlistCount={wishlistCount} />
+              <UserMenu
+                name={name ?? "Mon compte"}
+                avatar={profile!.avatar}
+                wishlistCount={wishlistCount}
+                admin={admin}
+              />
             ) : (
               <>
                 <Link href="/login" className="btn-ghost py-1.5">
@@ -91,7 +98,13 @@ export async function Header() {
               </Link>
             )}
             <Suspense>
-              <MobileMenu links={links} userName={name} avatar={profile?.avatar} wishlistCount={wishlistCount} />
+              <MobileMenu
+                links={links}
+                userName={name}
+                avatar={profile?.avatar}
+                wishlistCount={wishlistCount}
+                admin={admin}
+              />
             </Suspense>
           </div>
         </div>

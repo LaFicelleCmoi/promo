@@ -7,6 +7,7 @@ import { fetchSteamDeals } from "@/lib/sources/steam";
 import { fetchGogDeals } from "@/lib/sources/gog";
 import { fetchPlayStationDeals } from "@/lib/sources/playstation";
 import { fetchXboxDeals } from "@/lib/sources/xbox";
+import { fetchMobileDeals } from "@/lib/sources/mobile";
 import { sendWishlistNotifications } from "@/lib/push/alerts";
 import type { DealInput, DealSource } from "@/lib/types";
 
@@ -53,6 +54,32 @@ export async function GET(request: NextRequest) {
       }
     }),
   );
+
+  // Jeux mobiles (Google Play / App Store), vérifiés sur les boutiques officielles.
+  try {
+    const { deals, errors } = await fetchMobileDeals();
+    const rows = deals.map((d) => ({ ...d, last_seen_at: startedAt }));
+    if (rows.length) {
+      const { error } = await supabase.from("deals").upsert(rows, { onConflict: "source,external_id" });
+      if (error) throw new Error(error.message);
+    }
+    // Retire les promos mobiles plus annoncées ou terminées, uniquement pour les plateformes lues avec succès.
+    const okPrefixes = [
+      !errors.some((e) => e.startsWith("Android")) && "android:",
+      !errors.some((e) => e.startsWith("iOS")) && "ios:",
+    ].filter(Boolean) as string[];
+    for (const prefix of okPrefixes) {
+      await supabase
+        .from("deals")
+        .delete()
+        .eq("source", "community")
+        .like("external_id", `${prefix}%`)
+        .lt("last_seen_at", startedAt);
+    }
+    report.mobile = errors.length ? `${rows.length} (${errors.join(" ; ")})` : rows.length;
+  } catch (err) {
+    report.mobile = `erreur : ${err instanceof Error ? err.message : String(err)}`;
+  }
 
   // Relevé quotidien des prix + mise à jour du plus bas prix observé.
   const { data: priceRecords, error: historyError } = await supabase.rpc("record_price_history");

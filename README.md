@@ -27,6 +27,8 @@ Les prix sont relevés chaque jour directement sur les boutiques officielles :
 | Epic Games Store   | PC              | EUR    | jeux gratuits / promos mises en avant     |
 | GOG                | PC              | EUR    | API catalogue GOG                         |
 | CheapShark         | PC              | USD    | autres revendeurs (Humble, Fanatical…)    |
+| Google Play        | Mobile          | EUR    | r/googleplaydeals + vérification Google Play |
+| App Store          | Mobile          | EUR    | r/AppHookup + API iTunes d'Apple          |
 | Communauté         | Toutes          | EUR    | promos proposées par les utilisateurs     |
 
 Les réductions réservées aux abonnés (PS Plus, Game Pass) sont ignorées : seules les promos ouvertes à tous

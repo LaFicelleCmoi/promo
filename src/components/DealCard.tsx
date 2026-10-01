@@ -42,9 +42,21 @@ export function DealCard({ deal, userId, inWishlist = false, eurRate }: Props) {
       />
       <article className="flex h-full flex-col">
         <Link href={`/jeu/${deal.id}`} className="relative block aspect-[460/215] overflow-hidden bg-surface-2">
+          {deal.platform === "mobile" && deal.image_url && (
+            // Icône carrée des jeux mobiles : affichée entière sur un fond flou de la même image.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              aria-hidden
+              src={deal.image_url}
+              alt=""
+              className="absolute inset-0 h-full w-full scale-125 object-cover opacity-50 blur-2xl"
+            />
+          )}
           <GameImage
             src={deal.image_url}
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+            className={`relative h-full w-full transition duration-500 group-hover:scale-[1.03] ${
+              deal.platform === "mobile" ? "object-contain p-3 drop-shadow-xl" : "object-cover"
+            }`}
           />
           {deal.discount > 0 && (
             <span className="absolute top-2 left-2 rounded-md bg-deal px-1.5 py-0.5 text-xs font-black text-black sm:px-2 sm:text-sm">

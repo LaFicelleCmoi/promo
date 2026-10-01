@@ -27,10 +27,13 @@ Les prix sont relevés chaque jour directement sur les boutiques officielles :
 | Epic Games Store   | PC              | EUR    | jeux gratuits / promos mises en avant     |
 | GOG                | PC              | EUR    | API catalogue GOG                         |
 | Ubisoft Connect    | PC              | EUR    | catalogue du Ubisoft Store (index Algolia public) |
-| CheapShark         | PC              | USD    | autres revendeurs (Humble, Fanatical…)    |
+| Epic (CheapShark)  | PC              | USD    | promos payantes de l'Epic Games Store     |
 | Google Play        | Mobile          | EUR    | r/googleplaydeals + vérification Google Play |
 | App Store          | Mobile          | EUR    | r/AppHookup + API iTunes d'Apple          |
 | Communauté         | Toutes          | EUR    | promos proposées par les utilisateurs     |
+
+Seules ces boutiques officielles sont suivies : les revendeurs de clés (Humble, Fanatical, GreenManGaming, IndieGala…)
+sont exclus, y compris pour les promos proposées par la communauté (la boutique est déduite du lien).
 
 Les réductions réservées aux abonnés (PS Plus, Game Pass) sont ignorées : seules les promos ouvertes à tous
 sont suivies.
@@ -55,7 +58,6 @@ badges, le liseré des cartes et le bouton « Voir sur … ».
 | Epic Games Store  | `#f4f4f5` | `#f4f4f5` / `#111111`   |
 | GOG               | `#e864e0` | `#86328a` / blanc       |
 | Ubisoft Connect   | `#fde047` | `#2563eb` / blanc       |
-| Humble, Fanatical, GMG, Instant Gaming, IndieGala | teintes propres | — |
 
 Les repères sont vérifiés sur fond sombre : contraste ≥ 4,5:1, écart ΔE ≥ 18 entre les 7 boutiques principales en
 vision normale (≥ 6 en daltonisme, toléré car le nom de la boutique est toujours écrit). Le texte des badges reste

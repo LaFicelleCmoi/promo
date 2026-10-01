@@ -195,6 +195,34 @@ export default function ConfidentialitePage() {
           ),
         },
         {
+          id: "extension",
+          title: "Extension Chrome",
+          content: (
+            <>
+              <p>
+                L&apos;extension Promo Tracker (facultative) ne s&apos;active que sur les pages produit des boutiques
+                officielles suivies (Steam, PlayStation Store, Xbox, Nintendo, Epic, GOG, Ubisoft, Google Play, App
+                Store).
+              </p>
+              <ul>
+                <li>
+                  Elle lit uniquement le <strong>nom du jeu</strong> affiché sur la page et l&apos;envoie à Promo
+                  Tracker pour récupérer ses prix. Ni l&apos;adresse de la page, ni ton historique, ni le contenu de tes
+                  formulaires ou paniers ne sont lus ou transmis.
+                </li>
+                <li>
+                  Si tu es connecté sur Promo Tracker dans le même navigateur, ta session est utilisée pour savoir si le
+                  jeu est dans ta wishlist et pour l&apos;y ajouter quand tu cliques sur « Suivre ce jeu ».
+                </li>
+                <li>
+                  Elle mémorise localement un seul réglage (panneau réduit ou non). Aucun pisteur, aucune publicité,
+                  aucune donnée vendue.
+                </li>
+              </ul>
+            </>
+          ),
+        },
+        {
           id: "droits",
           title: "Tes droits",
           content: (

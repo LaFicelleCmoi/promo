@@ -7,10 +7,26 @@ import { SearchPalette, SearchTrigger } from "@/components/SearchPalette";
 import StarBorder from "@/components/reactbits/StarBorder";
 import { UserMenu } from "@/components/UserMenu";
 import { MobileTabBar } from "@/components/MobileTabBar";
+import { ACCENTS, parseProfile } from "@/lib/profile";
 
 export async function Header() {
   const user = await getUser();
-  const name = (user?.user_metadata?.username as string | undefined) ?? user?.email ?? null;
+  const profile = user ? parseProfile(user.user_metadata, user.email?.split("@")[0]) : null;
+  const name = profile?.username ?? null;
+
+  // Personnalisation du compte appliquée à tout le site, rendue côté serveur (pas de clignotement).
+  const themeCss = profile
+    ? [
+        profile.accent !== "violet" &&
+          `:root{--color-accent:${ACCENTS[profile.accent].color};--color-accent-hover:${ACCENTS[profile.accent].hover}}`,
+        profile.density === "compact" &&
+          "@media (min-width:768px){.deal-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}@media (min-width:1280px){.deal-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}.deal-grid h3{font-size:.875rem}",
+        profile.reduceMotion &&
+          ".aurora-bg{display:none}*,*::before,*::after{animation-duration:0s!important;animation-iteration-count:1!important;transition-duration:0s!important;scroll-behavior:auto!important}",
+      ]
+        .filter(Boolean)
+        .join("")
+    : "";
 
   // Nombre de jeux en wishlist, affiché à côté des liens « Ma wishlist ».
   let wishlistCount = 0;
@@ -33,6 +49,7 @@ export async function Header() {
 
   return (
     <>
+      {themeCss && <style>{themeCss}</style>}
       <header className="sticky top-0 z-30 border-b border-border bg-bg/85 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 lg:gap-6">
           <Link href="/" aria-label="Promo Tracker — accueil" className="shrink-0 text-lg font-black tracking-tight">
@@ -54,7 +71,7 @@ export async function Header() {
           <div className="ml-auto hidden items-center gap-3 md:flex">
             <SearchTrigger />
             {user ? (
-              <UserMenu name={name ?? "Mon compte"} wishlistCount={wishlistCount} />
+              <UserMenu name={name ?? "Mon compte"} avatar={profile!.avatar} wishlistCount={wishlistCount} />
             ) : (
               <>
                 <Link href="/login" className="btn-ghost py-1.5">
@@ -74,7 +91,7 @@ export async function Header() {
               </Link>
             )}
             <Suspense>
-              <MobileMenu links={links} userName={name} wishlistCount={wishlistCount} />
+              <MobileMenu links={links} userName={name} avatar={profile?.avatar} wishlistCount={wishlistCount} />
             </Suspense>
           </div>
         </div>

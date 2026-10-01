@@ -25,6 +25,7 @@ export async function GET() {
     compte: {
       email: user.email,
       pseudo: user.user_metadata?.username ?? null,
+      profil: user.user_metadata?.profile ?? null,
       cree_le: user.created_at,
       derniere_connexion: user.last_sign_in_at,
     },

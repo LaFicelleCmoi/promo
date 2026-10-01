@@ -139,7 +139,20 @@ export default async function DealPage({ params }: { params: Params }) {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-x-8">
         <div className="order-1 min-w-0 lg:col-start-1 lg:row-start-1">
           <div className="card relative aspect-[460/215] overflow-hidden">
-            <GameImage src={deal.image_url} loading="eager" className="h-full w-full object-cover" />
+            {deal.platform === "mobile" && deal.image_url && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                aria-hidden
+                src={deal.image_url}
+                alt=""
+                className="absolute inset-0 h-full w-full scale-125 object-cover opacity-50 blur-3xl"
+              />
+            )}
+            <GameImage
+              src={deal.image_url}
+              loading="eager"
+              className={`relative h-full w-full ${deal.platform === "mobile" ? "object-contain p-6 drop-shadow-2xl" : "object-cover"}`}
+            />
           </div>
         </div>
 
@@ -165,7 +178,9 @@ export default async function DealPage({ params }: { params: Params }) {
               ) : (
                 <p className="rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted">
                   {deal.source === "community"
-                    ? "Promo proposée par la communauté : pas de suivi automatique du prix."
+                    ? deal.platform === "mobile"
+                      ? "Promo mobile repérée par la communauté (Reddit), prix vérifié sur la boutique officielle : pas d'historique pour l'instant."
+                      : "Promo proposée par la communauté : pas de suivi automatique du prix."
                     : "Le suivi vient de commencer : le graphique apparaîtra dès le prochain relevé quotidien."}
                 </p>
               )}

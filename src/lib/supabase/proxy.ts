@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PROTECTED_PATHS = ["/wishlist", "/deals/new"];
+const PROTECTED_PATHS = ["/wishlist", "/deals/new", "/compte"];
 const GUEST_ONLY_PATHS = ["/login", "/signup"];
 
 export async function updateSession(request: NextRequest) {

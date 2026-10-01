@@ -1,10 +1,12 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PROTECTED_PATHS = ["/wishlist", "/deals/new", "/compte"];
+const PROTECTED_PATHS = ["/wishlist", "/deals/new", "/compte", "/admin"];
 const GUEST_ONLY_PATHS = ["/login", "/signup"];
 
 export async function updateSession(request: NextRequest) {
+  // Chemin transmis au layout racine (mode maintenance : certaines pages restent accessibles).
+  request.headers.set("x-pathname", request.nextUrl.pathname);
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(

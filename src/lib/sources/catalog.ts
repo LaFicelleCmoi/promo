@@ -6,6 +6,7 @@ export const SYNC_SOURCES = [
   "nintendo",
   "epic",
   "gog",
+  "ubisoft",
   "cheapshark",
   "mobile",
 ] as const;
@@ -18,6 +19,7 @@ export const SYNC_SOURCE_LABELS: Record<SyncSource, string> = {
   nintendo: "Nintendo eShop",
   epic: "Epic Games Store",
   gog: "GOG",
+  ubisoft: "Ubisoft Connect",
   cheapshark: "CheapShark (autres boutiques PC)",
   mobile: "Mobile (Google Play et App Store)",
 };

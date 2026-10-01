@@ -5,9 +5,19 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { logout } from "@/app/auth/actions";
 import { CountBadge } from "@/components/NavLinks";
+import { Avatar } from "@/components/Avatar";
+import type { Avatar as AvatarData } from "@/lib/profile";
 
 /** Menu du compte : avatar (initiale) et liens personnels. */
-export function UserMenu({ name, wishlistCount = 0 }: { name: string; wishlistCount?: number }) {
+export function UserMenu({
+  name,
+  avatar,
+  wishlistCount = 0,
+}: {
+  name: string;
+  avatar: AvatarData;
+  wishlistCount?: number;
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -25,8 +35,6 @@ export function UserMenu({ name, wishlistCount = 0 }: { name: string; wishlistCo
     };
   }, [open]);
 
-  const initial = name.trim().slice(0, 1).toUpperCase() || "?";
-
   return (
     <div ref={ref} className="relative">
       <button
@@ -36,12 +44,7 @@ export function UserMenu({ name, wishlistCount = 0 }: { name: string; wishlistCo
         aria-expanded={open}
         className="flex h-10 items-center gap-2 rounded-lg border border-border bg-surface pr-2.5 pl-1.5 text-sm text-slate-200 transition hover:border-accent"
       >
-        <span
-          aria-hidden
-          className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-accent to-pink-500 text-xs font-black text-white"
-        >
-          {initial}
-        </span>
+        <Avatar avatar={avatar} name={name} size={28} rounded="rounded-md" />
         <span className="hidden max-w-32 truncate lg:inline">{name}</span>
         <svg
           aria-hidden
@@ -74,7 +77,7 @@ export function UserMenu({ name, wishlistCount = 0 }: { name: string; wishlistCo
             <CountBadge n={wishlistCount} />
           </Link>
           <Link role="menuitem" href="/compte" className="block px-4 py-2.5 text-sm text-slate-200 hover:bg-surface-2">
-            Mon compte
+            Mon profil
           </Link>
           <Link
             role="menuitem"

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { saveDealAction } from "@/app/admin/actions";
 import { AdminForm, SubmitButton } from "@/components/admin/AdminForm";
 import { StoreBadge } from "@/components/StoreBadge";
+import { OFFICIAL_STORES } from "@/lib/stores";
 import { computeDiscount, formatPrice } from "@/lib/format";
 import { PLATFORMS, PLATFORM_LABELS, type Deal } from "@/lib/types";
 
@@ -110,15 +111,18 @@ export function AdminDealForm({ deal, id }: { deal?: Values; id?: string }) {
             <label htmlFor="d-store" className="label">
               Boutique
             </label>
-            <input
-              id="d-store"
-              name="store"
-              required
-              maxLength={80}
-              value={v.store}
-              onChange={set("store")}
-              className="input"
-            />
+            <select id="d-store" name="store" required value={v.store} onChange={set("store")} className="input">
+              <option value="" disabled>
+                Choisir…
+              </option>
+              {/* Variante existante (ex. « PlayStation Store (PS5) ») conservée telle quelle. */}
+              {v.store && !OFFICIAL_STORES.includes(v.store) && <option value={v.store}>{v.store}</option>}
+              {OFFICIAL_STORES.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <div>

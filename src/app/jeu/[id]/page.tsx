@@ -9,6 +9,7 @@ import { PLATFORM_LABELS, type Deal } from "@/lib/types";
 import { PriceHistoryChart, type PricePoint } from "@/components/PriceHistoryChart";
 import { WishlistButton } from "@/components/WishlistButton";
 import { ShareButton } from "@/components/ShareButton";
+import { isAdmin } from "@/lib/admin";
 import { GameImage } from "@/components/GameImage";
 import { getUsdToEur } from "@/lib/fx";
 import { RecentlyViewedTracker } from "@/components/RecentlyViewed";
@@ -133,6 +134,14 @@ export default async function DealPage({ params }: { params: Params }) {
         </Link>
         <span aria-hidden>›</span>
         <span className="max-w-[60vw] truncate text-slate-300">{deal.title}</span>
+        {isAdmin(user) && (
+          <Link
+            href={`/admin/promos/${deal.id}`}
+            className="ml-auto rounded-full border border-amber-400/40 bg-amber-400/10 px-2.5 py-0.5 text-xs font-semibold text-amber-300 hover:bg-amber-400/20"
+          >
+            Modifier (admin)
+          </Link>
+        )}
       </nav>
 
       {/* Mobile : image → prix → historique → comparateur. Ordinateur : 2 colonnes, prix collant à droite. */}

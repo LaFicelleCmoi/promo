@@ -2,7 +2,7 @@
  * Gamme de couleurs par boutique.
  *
  * - `color` : repère visuel (pastille, liseré de carte). Teintes inspirées des marques, ajustées pour rester
- *   distinctes entre elles sur fond sombre (vision normale ΔE ≥ 18 entre les 6 boutiques principales ;
+ *   distinctes entre elles sur fond sombre (vision normale ΔE ≥ 18 entre les 7 boutiques principales ;
  *   en daltonisme ΔE ≥ 6, toléré car le nom de la boutique est toujours écrit à côté).
  * - `button` / `buttonText` : bouton « Voir sur … » aux couleurs officielles, contraste texte ≥ 4,5:1.
  * Le texte des badges reste en couleur de texte neutre : la couleur ne porte jamais seule l'identité.
@@ -76,9 +76,9 @@ const THEMES: (StoreTheme & { match: RegExp })[] = [
   },
   {
     key: "ubisoft",
-    label: "Ubisoft Store",
+    label: "Ubisoft Connect",
     match: /ubisoft|uplay/i,
-    color: "#6b8dff",
+    color: "#fde047",
     button: "#2563eb",
     buttonText: "#ffffff",
   },
@@ -129,7 +129,7 @@ export function storeTheme(store: string): StoreTheme {
   return THEMES.find((t) => t.match.test(store)) ?? { ...DEFAULT, label: store };
 }
 
-/** Les 6 boutiques officielles suivies automatiquement, dans l'ordre d'affichage. */
-export const MAIN_STORES = ["steam", "playstation", "xbox", "nintendo", "epic", "gog"].map((key) =>
+/** Les 7 boutiques officielles suivies automatiquement, dans l'ordre d'affichage. */
+export const MAIN_STORES = ["steam", "playstation", "xbox", "nintendo", "epic", "gog", "ubisoft"].map((key) =>
   THEMES.find((t) => t.key === key)!,
 );

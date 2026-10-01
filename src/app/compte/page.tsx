@@ -3,8 +3,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DeleteAccountForm } from "@/components/DeleteAccountForm";
+import { ProfileEditor } from "@/components/ProfileEditor";
+import { Avatar } from "@/components/Avatar";
+import { parseProfile } from "@/lib/profile";
 
-export const metadata: Metadata = { title: "Mon compte — Promo Tracker" };
+export const metadata: Metadata = { title: "Mon profil — Promo Tracker" };
 
 const date = (iso?: string | null) =>
   iso ? new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : "—";
@@ -22,7 +25,8 @@ export default async function ComptePage() {
   const devices = Array.isArray(user.app_metadata?.push_subscriptions)
     ? user.app_metadata.push_subscriptions.length
     : 0;
-  const name = (user.user_metadata?.username as string | undefined) ?? user.email ?? "Mon compte";
+  const profile = parseProfile(user.user_metadata, user.email?.split("@")[0]);
+  const name = profile.username;
 
   const infos: [string, React.ReactNode][] = [
     ["Pseudo", name],
@@ -41,17 +45,16 @@ export default async function ComptePage() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div className="flex items-center gap-4">
-        <span
-          aria-hidden
-          className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-pink-500 text-2xl font-black text-white"
-        >
-          {name.slice(0, 1).toUpperCase()}
-        </span>
+        <Avatar avatar={profile.avatar} name={name} size={56} rounded="rounded-2xl" />
         <div>
-          <h1 className="text-2xl font-bold sm:text-3xl">Mon compte</h1>
-          <p className="text-sm text-muted">Tes informations, tes données et la suppression du compte.</p>
+          <h1 className="text-2xl font-bold sm:text-3xl">Mon profil</h1>
+          <p className="text-sm text-muted">Avatar, apparence du site, préférences et données du compte.</p>
         </div>
       </div>
+
+      <ProfileEditor initial={profile} />
+
+      <h2 className="pt-4 text-lg font-bold">Compte</h2>
 
       <dl className="card divide-y divide-border">
         {infos.map(([k, v]) => (

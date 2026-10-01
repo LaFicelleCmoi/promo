@@ -86,7 +86,7 @@ export default function MentionsLegalesPage() {
               </p>
               <p>
                 Les prix sont relevés automatiquement une fois par jour auprès des boutiques (Steam, PlayStation Store,
-                Xbox Store, Nintendo eShop, Epic Games Store, GOG, CheapShark) ou proposés par les utilisateurs. Ils
+                Xbox Store, Nintendo eShop, Epic Games Store, GOG, Ubisoft Connect, CheapShark) ou proposés par les utilisateurs. Ils
                 sont donnés <strong>à titre indicatif</strong> et peuvent avoir changé : seul le prix affiché par la
                 boutique au moment de l&apos;achat fait foi.
               </p>

@@ -91,6 +91,22 @@ const THEMES: (StoreTheme & { match: RegExp })[] = [
     buttonText: "#1a0a00",
   },
   {
+    key: "googleplay",
+    label: "Google Play",
+    match: /google\s?play/i,
+    color: "#3ddc84",
+    button: "#01875f",
+    buttonText: "#ffffff",
+  },
+  {
+    key: "appstore",
+    label: "App Store",
+    match: /app\s?store|apple/i,
+    color: "#2f9bff",
+    button: "#0a66d9",
+    buttonText: "#ffffff",
+  },
+  {
     key: "indiegala",
     label: "IndieGala",
     match: /indiegala/i,

@@ -100,7 +100,7 @@ export async function Hero({ deals, platforms, query }: Props) {
           </h1>
 
           <p className="mt-5 max-w-xl text-base text-pretty text-slate-300 sm:text-lg">
-            Steam, PlayStation, Xbox, Nintendo eShop, Epic et GOG comparés chaque jour. Historique des prix et alertes
+            Steam, PlayStation, Xbox, Nintendo eShop, Epic, GOG et Ubisoft Connect comparés chaque jour. Historique des prix et alertes
             sur ta wishlist.
           </p>
 

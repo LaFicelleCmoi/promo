@@ -113,6 +113,20 @@ téléphone ou l'ordinateur, même site fermé, pour tous les utilisateurs.
 **Inscription sans email** : le compte est créé côté serveur déjà confirmé (`REQUIRE_EMAIL_CONFIRMATION` absent ou
 `false`), l'inscription fonctionne donc avec n'importe quelle adresse.
 
+## Panel admin
+
+`/admin`, réservé aux comptes dont `app_metadata.role` vaut `admin` (404 pour tous les autres). Le rôle n'est modifiable que côté serveur : depuis le panel (« Promouvoir admin ») ou l'API d'administration de Supabase.
+
+- **Tableau de bord** : comptes, promos par source et plateforme, jeux les plus suivis, dernière synchro, état du site.
+- **Utilisateurs** : recherche, création, rôle admin, suspension (24 h → définitive), pseudo / email / mot de passe, réinitialisation du profil, wishlist, notification individuelle, suppression.
+- **Promos** : recherche et filtres, modification de tous les champs, ajout manuel, suppression, « Masquer » (la synchro ne la réimporte plus).
+- **Synchro & sources** : synchro complète ou par source, activation des sources, vidage d'une source, relevé des prix, purge, alertes.
+- **Notifications** : annonce Web Push à tous les abonnés, historique des alertes.
+- **Réglages** : bandeau d'annonce, mode maintenance, inscriptions et propositions ouvertes ou fermées, synchro quotidienne et alertes automatiques.
+- **Journal** : les 300 dernières actions admin.
+
+Réglages, journal et dernier rapport de synchro sont rangés en JSON dans le bucket privé `config` de Supabase Storage (aucune table supplémentaire).
+
 ## Déploiement (Vercel)
 
 Importe le repo sur Vercel, ajoute les variables de `.env.example` (avec `NEXT_PUBLIC_SITE_URL` = URL de prod).

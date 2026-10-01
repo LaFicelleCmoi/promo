@@ -2,13 +2,13 @@ import type { DealInput } from "@/lib/types";
 import { computeDiscount } from "@/lib/format";
 
 // Promos PC des autres revendeurs (Humble, Fanatical, GMG, Epic, Ubisoft...).
-// Steam et GOG ont leur propre connecteur (prix en euros) : on les exclut ici pour éviter les doublons.
+// Steam, GOG et Ubisoft ont leur propre connecteur (prix en euros) : on les exclut ici pour éviter les doublons.
 // https://apidocs.cheapshark.com/
 const API = "https://www.cheapshark.com/api/1.0";
 const USER_AGENT = "PromoTracker/1.0 (+https://github.com/LaFicelleCmoi/promo)";
 const PAGES = 5;
 const PAGE_SIZE = 60;
-const EXCLUDED_STORES = new Set(["1", "7"]); // 1 = Steam, 7 = GOG
+const EXCLUDED_STORES = new Set(["1", "7", "13"]); // 1 = Steam, 7 = GOG, 13 = Ubisoft Store
 
 type Store = { storeID: string; storeName: string; isActive: number };
 type CheapSharkDeal = {

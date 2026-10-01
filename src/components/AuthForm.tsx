@@ -90,6 +90,10 @@ export function AuthForm({ mode, next, initialError }: Props) {
     initialError ? { error: initialError } : undefined,
   );
   const isSignup = mode === "signup";
+  // Champs contrôlés : React 19 vide les champs non contrôlés après chaque envoi, même en cas d'erreur.
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [terms, setTerms] = useState(false);
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const pwd = strength(password);
@@ -159,6 +163,8 @@ export function AuthForm({ mode, next, initialError }: Props) {
                 <input
                   id="username"
                   name="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   required
                   minLength={3}
                   maxLength={30}
@@ -176,6 +182,8 @@ export function AuthForm({ mode, next, initialError }: Props) {
               <input
                 id="email"
                 name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 autoComplete="email"
                 inputMode="email"
@@ -229,6 +237,33 @@ export function AuthForm({ mode, next, initialError }: Props) {
                   </p>
                 )}
               </div>
+            )}
+            {isSignup && (
+              <label className="flex items-start gap-2.5 text-sm text-slate-300">
+                <input
+                  type="checkbox"
+                  name="terms"
+                  required
+                  checked={terms}
+                  onChange={(e) => setTerms(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-accent"
+                />
+                <span>
+                  J&apos;accepte les{" "}
+                  <Link href="/cgu" target="_blank" className="text-accent underline-offset-2 hover:underline">
+                    conditions d&apos;utilisation
+                  </Link>{" "}
+                  et la{" "}
+                  <Link
+                    href="/confidentialite"
+                    target="_blank"
+                    className="text-accent underline-offset-2 hover:underline"
+                  >
+                    politique de confidentialité
+                  </Link>
+                  .
+                </span>
+              </label>
             )}
 
             {state?.error && (

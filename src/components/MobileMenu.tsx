@@ -10,7 +10,13 @@ import { openSearch } from "@/components/SearchPalette";
 import { Avatar } from "@/components/Avatar";
 import type { Avatar as AvatarData } from "@/lib/profile";
 
-type Props = { links: NavLink[]; userName?: string | null; avatar?: AvatarData | null; wishlistCount?: number };
+type Props = {
+  links: NavLink[];
+  userName?: string | null;
+  avatar?: AvatarData | null;
+  wishlistCount?: number;
+  admin?: boolean;
+};
 
 const ICONS: Record<string, React.ReactNode> = {
   "/": <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" />,
@@ -49,7 +55,7 @@ function Icon({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function MobileMenu({ links, userName, avatar, wishlistCount = 0 }: Props) {
+export function MobileMenu({ links, userName, avatar, wishlistCount = 0, admin = false }: Props) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -132,6 +138,20 @@ export function MobileMenu({ links, userName, avatar, wishlistCount = 0 }: Props
                   </Link>
                 </div>
               </div>
+            )}
+
+            {admin && (
+              <Link
+                href="/admin"
+                onClick={close}
+                className="mt-3 flex items-center gap-3 rounded-xl border border-amber-400/40 bg-amber-400/10 px-4 py-3 font-semibold text-amber-200"
+              >
+                <Icon>
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </Icon>
+                <span className="flex-1">Panel admin</span>
+                <span aria-hidden>›</span>
+              </Link>
             )}
 
             <button

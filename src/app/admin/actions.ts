@@ -397,6 +397,10 @@ export async function clearSourceDeals(_prev: AdminResult, formData: FormData): 
         .eq("source", "community")
         .not("external_id", "like", "android:%")
         .not("external_id", "like", "ios:%");
+    } else if (source === "ubisoft") {
+      query = query.eq("source", "cheapshark").like("external_id", "ubisoft:%");
+    } else if (source === "cheapshark") {
+      query = query.eq("source", "cheapshark").not("external_id", "like", "ubisoft:%");
     } else if (isSyncSource(source)) {
       query = query.eq("source", source);
     } else {

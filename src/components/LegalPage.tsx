@@ -1,7 +1,7 @@
 import Link from "next/link";
 import LineSidebar from "@/components/reactbits/LineSidebar";
 
-export const LEGAL_UPDATED = "1er octobre 2026";
+export const LEGAL_UPDATED = "2 octobre 2026";
 export const CONTACT_DISCORD = "LaFicelleCmoi";
 
 type Section = { id: string; title: string; content: React.ReactNode };

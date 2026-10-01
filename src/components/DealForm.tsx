@@ -4,36 +4,7 @@ import { useActionState, useState } from "react";
 import { createDeal, type DealFormState } from "@/app/deals/actions";
 import { PLATFORMS, PLATFORM_LABELS, type Platform } from "@/lib/types";
 import { GameImage } from "@/components/GameImage";
-
-/** Boutiques reconnues à partir du lien collé. */
-const STORES: { match: RegExp; store: string; platform?: Platform }[] = [
-  { match: /(^|\.)playstation\.com$/, store: "PlayStation Store", platform: "playstation" },
-  { match: /(^|\.)(xbox|microsoft)\.com$/, store: "Xbox Store", platform: "xbox" },
-  { match: /(^|\.)nintendo\.(com|fr|co\.uk|de)$/, store: "Nintendo eShop", platform: "switch" },
-  { match: /(^|\.)steampowered\.com$/, store: "Steam", platform: "pc" },
-  { match: /(^|\.)epicgames\.com$/, store: "Epic Games Store", platform: "pc" },
-  { match: /(^|\.)gog\.com$/, store: "GOG", platform: "pc" },
-  { match: /(^|\.)instant-gaming\.com$/, store: "Instant Gaming", platform: "pc" },
-  { match: /(^|\.)eneba\.com$/, store: "Eneba" },
-  { match: /(^|\.)apps\.apple\.com$/, store: "App Store", platform: "mobile" },
-  { match: /(^|\.)play\.google\.com$/, store: "Google Play", platform: "mobile" },
-  { match: /(^|\.)amazon\.(fr|com|de|co\.uk|es|it)$/, store: "Amazon" },
-  { match: /(^|\.)fnac\.com$/, store: "Fnac" },
-  { match: /(^|\.)cdiscount\.com$/, store: "Cdiscount" },
-  { match: /(^|\.)micromania\.fr$/, store: "Micromania" },
-  { match: /(^|\.)leclerc\.com$|e\.leclerc$/, store: "E.Leclerc" },
-  { match: /(^|\.)auchan\.fr$/, store: "Auchan" },
-  { match: /(^|\.)carrefour\.fr$/, store: "Carrefour" },
-];
-
-function detectStore(url: string) {
-  try {
-    const host = new URL(url).hostname.replace(/^www\./, "");
-    return STORES.find((s) => s.match.test(host)) ?? null;
-  } catch {
-    return null;
-  }
-}
+import { OFFICIAL_STORES, officialStoreFromUrl } from "@/lib/stores";
 
 const parsePrice = (v: string) => {
   const n = Number(v.trim().replace(",", "."));
@@ -46,22 +17,17 @@ export function DealForm() {
   const [state, action, pending] = useActionState<DealFormState, FormData>(createDeal, undefined);
   const [title, setTitle] = useState("");
   const [platform, setPlatform] = useState<Platform>("playstation");
-  const [store, setStore] = useState("");
   const [url, setUrl] = useState("");
   const [sale, setSale] = useState("");
   const [normal, setNormal] = useState("");
   const [image, setImage] = useState("");
-  const [detected, setDetected] = useState<string | null>(null);
+  const detected = url.trim() ? officialStoreFromUrl(url.trim()) : null;
+  const store = detected?.store ?? "";
 
   function onUrlChange(value: string) {
     setUrl(value);
-    const found = detectStore(value);
-    setDetected(found?.store ?? null);
-    if (found) {
-      // On ne remplace pas une boutique saisie à la main.
-      if (!store || STORES.some((s) => s.store === store)) setStore(found.store);
-      if (found.platform) setPlatform(found.platform);
-    }
+    const found = officialStoreFromUrl(value.trim());
+    if (found?.platform) setPlatform(found.platform);
   }
 
   const salePrice = parsePrice(sale);
@@ -90,7 +56,11 @@ export function DealForm() {
           />
           <p className="mt-1 min-h-4 text-xs text-muted" aria-live="polite">
             {detected ? (
-              <span className="text-deal">✓ Boutique reconnue : {detected}</span>
+              <span className="text-deal">✓ Boutique reconnue : {detected.store}</span>
+            ) : url.trim() ? (
+              <span className="text-danger">
+                Boutique non acceptée : seules les boutiques officielles sont suivies ({OFFICIAL_STORES.join(", ")}).
+              </span>
             ) : (
               "La boutique et la plateforme sont détectées automatiquement."
             )}
@@ -140,12 +110,10 @@ export function DealForm() {
           <input
             id="store"
             name="store"
-            required
-            maxLength={80}
-            placeholder="PlayStation Store, Amazon, Fnac…"
+            readOnly
+            placeholder="Détectée depuis le lien"
             value={store}
-            onChange={(e) => setStore(e.target.value)}
-            className="input"
+            className="input cursor-default text-muted"
           />
         </div>
 
@@ -214,7 +182,11 @@ export function DealForm() {
         )}
 
         <div className="sm:col-span-2">
-          <button type="submit" disabled={pending || priceError} className="btn-primary w-full py-3 sm:w-auto sm:py-2">
+          <button
+            type="submit"
+            disabled={pending || priceError || !detected}
+            className="btn-primary w-full py-3 sm:w-auto sm:py-2"
+          >
             {pending ? "Publication…" : "Publier la promo"}
           </button>
         </div>

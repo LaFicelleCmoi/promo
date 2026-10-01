@@ -7,8 +7,10 @@ import { createPortal } from "react-dom";
 import { logout } from "@/app/auth/actions";
 import { CountBadge, useIsActive, type NavLink } from "@/components/NavLinks";
 import { openSearch } from "@/components/SearchPalette";
+import { Avatar } from "@/components/Avatar";
+import type { Avatar as AvatarData } from "@/lib/profile";
 
-type Props = { links: NavLink[]; userName?: string | null; wishlistCount?: number };
+type Props = { links: NavLink[]; userName?: string | null; avatar?: AvatarData | null; wishlistCount?: number };
 
 const ICONS: Record<string, React.ReactNode> = {
   "/": <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" />,
@@ -47,7 +49,7 @@ function Icon({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function MobileMenu({ links, userName, wishlistCount = 0 }: Props) {
+export function MobileMenu({ links, userName, avatar, wishlistCount = 0 }: Props) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -69,7 +71,6 @@ export function MobileMenu({ links, userName, wishlistCount = 0 }: Props) {
   }, [open]);
 
   const close = () => setOpen(false);
-  const initial = (userName ?? "?").trim().slice(0, 1).toUpperCase();
 
   return (
     <div className="md:hidden">
@@ -107,12 +108,7 @@ export function MobileMenu({ links, userName, wishlistCount = 0 }: Props) {
                 onClick={close}
                 className="card flex items-center gap-3 p-4 transition active:border-accent"
               >
-                <span
-                  aria-hidden
-                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-pink-500 text-lg font-black text-white"
-                >
-                  {initial}
-                </span>
+                <Avatar avatar={avatar ?? { type: "initial", gradient: "aurore" }} name={userName ?? "?"} size={48} />
                 <div className="min-w-0">
                   <p className="truncate font-bold text-white">{userName}</p>
                   <p className="text-sm text-muted">
@@ -121,7 +117,7 @@ export function MobileMenu({ links, userName, wishlistCount = 0 }: Props) {
                       : "Aucun jeu suivi pour l'instant"}
                   </p>
                 </div>
-                <span className="ml-auto text-xs font-semibold text-accent">Mon compte ›</span>
+                <span className="ml-auto text-xs font-semibold text-accent">Mon profil ›</span>
               </Link>
             ) : (
               <div className="card p-4">

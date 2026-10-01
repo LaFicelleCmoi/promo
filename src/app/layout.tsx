@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata, Viewport } from "next";
 import { Header } from "@/components/Header";
 import { Toaster } from "@/components/Toaster";
@@ -34,6 +35,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Données : Steam, PlayStation Store, Xbox Store, Nintendo eShop, Epic Games Store, GOG, CheapShark et la
             communauté. Prix indicatifs relevés chaque jour, vérifie sur la boutique avant d&apos;acheter.
           </p>
+          <nav aria-label="Informations légales" className="flex flex-wrap gap-x-4 gap-y-1 pt-2">
+            <Link href="/mentions-legales" className="hover:text-white">
+              Mentions légales
+            </Link>
+            <Link href="/confidentialite" className="hover:text-white">
+              Confidentialité et cookies
+            </Link>
+            <Link href="/cgu" className="hover:text-white">
+              Conditions d&apos;utilisation
+            </Link>
+            <span>© {new Date().getFullYear()} Promo Tracker</span>
+          </nav>
         </footer>
         <Toaster />
         <BackToTop />

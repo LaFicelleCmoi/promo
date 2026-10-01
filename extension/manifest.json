@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "Promo Tracker — meilleur prix des jeux vidéo",
+  "short_name": "Promo Tracker",
+  "version": "1.0.0",
+  "description": "Le meilleur prix du jeu que tu regardes : Steam, PlayStation, Xbox, Nintendo, Epic, GOG, Ubisoft, Google Play et App Store.",
+  "homepage_url": "https://promo-rouge.vercel.app/extension",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Promo Tracker",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage"],
+  "host_permissions": ["https://promo-rouge.vercel.app/*"],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://store.steampowered.com/app/*",
+        "https://store.playstation.com/*",
+        "https://www.xbox.com/*",
+        "https://www.nintendo.com/*",
+        "https://store.epicgames.com/*",
+        "https://www.gog.com/*",
+        "https://store.ubisoft.com/*",
+        "https://play.google.com/store/apps/*",
+        "https://apps.apple.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

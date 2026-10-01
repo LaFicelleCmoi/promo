@@ -9,12 +9,14 @@ import { fetchGogDeals } from "@/lib/sources/gog";
 import { fetchPlayStationDeals } from "@/lib/sources/playstation";
 import { fetchXboxDeals } from "@/lib/sources/xbox";
 import { fetchMobileDeals } from "@/lib/sources/mobile";
+import { UBISOFT_PREFIX, fetchUbisoftDeals } from "@/lib/sources/ubisoft";
 import { SYNC_SOURCES, type SyncSource } from "@/lib/sources/catalog";
 import { sendWishlistNotifications } from "@/lib/push/alerts";
 import { getFreshSettings, getLastSync, saveLastSync, type SyncReport } from "@/lib/settings";
 import type { DealInput } from "@/lib/types";
 
 const FETCHERS: Record<Exclude<SyncSource, "mobile">, () => Promise<DealInput[]>> = {
+  ubisoft: fetchUbisoftDeals,
   steam: fetchSteamDeals,
   playstation: fetchPlayStationDeals,
   xbox: fetchXboxDeals,
@@ -59,7 +61,12 @@ export async function runSync({ only, followUp = true, trigger = "cron" }: Optio
             ? await syncMobile(supabase, startedAt, keep)
             : { count: await upsertAll(supabase, dedupe(await FETCHERS[name]()).filter(keep), startedAt) };
         report.sources[name] = { ok: true, count, error: warning, ms: Date.now() - t0 };
-        if (name !== "mobile") synced.push(name);
+        if (name === "ubisoft" || name === "cheapshark") {
+          // Ubisoft partage la source « cheapshark » en base : chaque connecteur ne retire que ses propres promos.
+          await removeStale(supabase, "cheapshark", startedAt, name === "ubisoft" ? "only" : "except", UBISOFT_PREFIX);
+        } else if (name !== "mobile") {
+          synced.push(name);
+        }
       } catch (err) {
         report.sources[name] = {
           ok: false,
@@ -143,6 +150,21 @@ async function syncMobile(supabase: SupabaseClient, startedAt: string, keep: (d:
   }
   if (errors.length && okPrefixes.length === 0) throw new Error(errors.join(" ; "));
   return { count, warning: errors.length ? errors.join(" ; ") : undefined };
+}
+
+/** Retire les promos d'une source plus vues lors de cette synchro, avec ou sans un préfixe d'identifiant. */
+async function removeStale(
+  supabase: SupabaseClient,
+  source: string,
+  startedAt: string,
+  mode: "only" | "except",
+  prefix: string,
+) {
+  const query = supabase.from("deals").delete().eq("source", source).lt("last_seen_at", startedAt);
+  const { error } = await (mode === "only"
+    ? query.like("external_id", `${prefix}%`)
+    : query.not("external_id", "like", `${prefix}%`));
+  if (error) throw new Error(error.message);
 }
 
 function dedupe(deals: DealInput[]) {

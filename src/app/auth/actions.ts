@@ -42,6 +42,9 @@ export async function signup(_prev: AuthState, formData: FormData): Promise<Auth
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: "Adresse email invalide." };
   if (password.length < 8) return { error: "Le mot de passe doit faire au moins 8 caractères." };
   if (password !== confirm) return { error: "Les mots de passe ne correspondent pas." };
+  if (formData.get("terms") !== "on") {
+    return { error: "Accepte les conditions d'utilisation et la politique de confidentialité pour créer ton compte." };
+  }
 
   const supabase = await createClient();
 

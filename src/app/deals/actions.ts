@@ -7,6 +7,7 @@ import { computeDiscount } from "@/lib/format";
 import { isPlatform } from "@/lib/types";
 import { getFreshSettings } from "@/lib/settings";
 import { isAdmin } from "@/lib/admin";
+import { officialStoreFromUrl } from "@/lib/stores";
 
 export type DealFormState = { error?: string } | undefined;
 
@@ -38,7 +39,6 @@ export async function createDeal(_prev: DealFormState, formData: FormData): Prom
 
   const title = String(formData.get("title") ?? "").trim();
   const platform = formData.get("platform");
-  const store = String(formData.get("store") ?? "").trim();
   const url = String(formData.get("url") ?? "").trim();
   const imageUrl = String(formData.get("image_url") ?? "").trim();
   const salePrice = parsePrice(formData.get("sale_price"));
@@ -47,8 +47,14 @@ export async function createDeal(_prev: DealFormState, formData: FormData): Prom
 
   if (!title || title.length > 200) return { error: "Titre requis (200 caractères max)." };
   if (!isPlatform(platform)) return { error: "Plateforme invalide." };
-  if (!store) return { error: "Boutique requise." };
   if (!isHttpUrl(url)) return { error: "Lien de la promo invalide." };
+  // La boutique vient du lien : seules les boutiques officielles suivies par le site sont acceptées.
+  const store = officialStoreFromUrl(url)?.store;
+  if (!store)
+    return {
+      error:
+        "Seules les promos des boutiques officielles sont acceptées (Steam, PlayStation, Xbox, Nintendo, Epic, GOG, Ubisoft, Google Play, App Store).",
+    };
   if (imageUrl && !isHttpUrl(imageUrl)) return { error: "Lien de l'image invalide." };
   if (salePrice === null || Number.isNaN(salePrice)) return { error: "Prix promo invalide." };
   if (Number.isNaN(normalPrice)) return { error: "Prix normal invalide." };

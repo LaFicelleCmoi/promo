@@ -15,9 +15,16 @@ export type FilterValues = {
   low?: string;
   sort?: string;
   page?: string;
+  mine?: string;
 };
 
-type Props = { values: FilterValues; stores: string[]; platformCounts: Record<string, number> };
+type Props = {
+  values: FilterValues;
+  stores: string[];
+  platformCounts: Record<string, number>;
+  /** Plateformes favorites du profil : ajoute l'onglet « ★ Mes plateformes ». */
+  favorites?: string[];
+};
 
 export const SORTS = [
   { value: "discount", label: "Réduction" },
@@ -35,7 +42,7 @@ export function hrefWith(values: FilterValues, patch: Partial<FilterValues>) {
   return qs ? `/?${qs}` : "/";
 }
 
-export function Filters({ values, stores, platformCounts }: Props) {
+export function Filters({ values, stores, platformCounts, favorites = [] }: Props) {
   const total = Object.values(platformCounts).reduce((a, b) => a + b, 0);
   const chips = activeChips(values);
   const activeCount = chips.length;
@@ -44,15 +51,23 @@ export function Filters({ values, stores, platformCounts }: Props) {
     <div className="space-y-4">
       <TabsScroller className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto scroll-smooth px-4 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
         <PlatformTab
-          href={hrefWith(values, { platform: undefined, store: undefined, page: undefined })}
-          active={!values.platform}
+          href={hrefWith(values, { platform: undefined, store: undefined, page: undefined, mine: undefined })}
+          active={!values.platform && values.mine !== "1"}
         >
           Toutes <Count n={total} />
         </PlatformTab>
+        {favorites.length > 0 && (
+          <PlatformTab
+            href={hrefWith(values, { platform: undefined, store: undefined, page: undefined, mine: "1" })}
+            active={values.mine === "1" && !values.platform}
+          >
+            ★ Mes plateformes <Count n={favorites.reduce((sum, p) => sum + (platformCounts[p] ?? 0), 0)} />
+          </PlatformTab>
+        )}
         {PLATFORMS.filter((p) => p !== "other" || platformCounts[p]).map((p) => (
           <PlatformTab
             key={p}
-            href={hrefWith(values, { platform: p, store: undefined, page: undefined })}
+            href={hrefWith(values, { platform: p, store: undefined, page: undefined, mine: undefined })}
             active={values.platform === p}
           >
             {PLATFORM_LABELS[p]} <Count n={platformCounts[p] ?? 0} />

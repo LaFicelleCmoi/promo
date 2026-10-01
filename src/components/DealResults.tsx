@@ -26,7 +26,7 @@ function pageList(current: number, total: number): (number | "…")[] {
   return out;
 }
 
-export async function DealResults({ values }: { values: FilterValues }) {
+export async function DealResults({ values, favorites = [] }: { values: FilterValues; favorites?: string[] }) {
   const page = Math.max(1, Number(values.page) || 1);
   const supabase = await createClient();
 
@@ -39,6 +39,7 @@ export async function DealResults({ values }: { values: FilterValues }) {
   const words = (values.q ?? "").trim().split(/\s+/).filter(Boolean).slice(0, 8);
   for (const word of words) query = query.ilike("title", `%${escapeLike(word)}%`);
   if (values.platform) query = query.eq("platform", values.platform);
+  else if (values.mine === "1" && favorites.length) query = query.in("platform", favorites);
   if (values.store) query = query.eq("store", values.store);
   if (Number(values.min) > 0) query = query.gte("discount", Number(values.min));
   if (values.max !== undefined && values.max !== "" && Number(values.max) >= 0)
@@ -146,7 +147,7 @@ export async function DealResults({ values }: { values: FilterValues }) {
           </div>
         </div>
       ) : (
-        <div className="grid gap-3 xs:grid-cols-2 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
+        <div className="deal-grid grid gap-3 xs:grid-cols-2 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
           {deals.map((deal) => (
             <DealCard
               key={deal.id}

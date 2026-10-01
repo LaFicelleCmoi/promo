@@ -5,11 +5,15 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { computeDiscount } from "@/lib/format";
 import { isPlatform } from "@/lib/types";
+import { getFreshSettings } from "@/lib/settings";
+import { isAdmin } from "@/lib/admin";
 
 export type DealFormState = { error?: string } | undefined;
 
 function parsePrice(value: FormDataEntryValue | null) {
-  const raw = String(value ?? "").trim().replace(",", ".");
+  const raw = String(value ?? "")
+    .trim()
+    .replace(",", ".");
   if (raw === "") return null;
   const n = Number(raw);
   return Number.isFinite(n) && n >= 0 ? Math.round(n * 100) / 100 : NaN;
@@ -28,6 +32,9 @@ export async function createDeal(_prev: DealFormState, formData: FormData): Prom
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) redirect("/login?next=/deals/new");
+  if (!(await getFreshSettings()).communityDealsOpen && !isAdmin(auth.user)) {
+    return { error: "Les propositions de promos sont temporairement fermées." };
+  }
 
   const title = String(formData.get("title") ?? "").trim();
   const platform = formData.get("platform");

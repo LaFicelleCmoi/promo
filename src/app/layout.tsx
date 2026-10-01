@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: "Promo Tracker — les promos jeux vidéo, toutes plateformes",
   description:
-    "Suis les prix et promos jeux vidéo sur Steam, PlayStation, Xbox, Nintendo eShop, Epic et GOG. Historique, wishlist et alertes de prix.",
+    "Suis les prix et promos jeux vidéo sur Steam, PlayStation, Xbox, Nintendo eShop, Epic, GOG et Ubisoft Connect. Historique, wishlist et alertes de prix.",
 };
 
 export const viewport: Viewport = {
@@ -59,7 +59,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             Les achats se font uniquement sur les boutiques officielles.
           </p>
           <p>
-            Données : Steam, PlayStation Store, Xbox Store, Nintendo eShop, Epic Games Store, GOG, CheapShark, Google
+            Données : Steam, PlayStation Store, Xbox Store, Nintendo eShop, Epic Games Store, GOG, Ubisoft Connect, CheapShark, Google
             Play et App Store (repérés via Reddit) et la communauté. Prix indicatifs relevés chaque jour, vérifie sur la
             boutique avant d&apos;acheter.
           </p>

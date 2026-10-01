@@ -32,8 +32,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Les achats se font uniquement sur les boutiques officielles.
           </p>
           <p>
-            Données : Steam, PlayStation Store, Xbox Store, Nintendo eShop, Epic Games Store, GOG, CheapShark et la
-            communauté. Prix indicatifs relevés chaque jour, vérifie sur la boutique avant d&apos;acheter.
+            Données : Steam, PlayStation Store, Xbox Store, Nintendo eShop, Epic Games Store, GOG, CheapShark, Google
+            Play et App Store (repérés via Reddit) et la communauté. Prix indicatifs relevés chaque jour, vérifie sur la
+            boutique avant d&apos;acheter.
           </p>
           <nav aria-label="Informations légales" className="flex flex-wrap gap-x-4 gap-y-1 pt-2">
             <Link href="/mentions-legales" className="hover:text-white">

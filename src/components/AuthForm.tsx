@@ -9,7 +9,7 @@ type Props = { mode: "login" | "signup"; next?: string; initialError?: string };
 const BENEFITS = [
   { title: "Wishlist et alertes", text: "Suis tes jeux, sois prévenu dès qu'ils passent sous ton prix cible." },
   { title: "Historique des prix", text: "Vérifie si une promo est vraiment un bon plan avant d'acheter." },
-  { title: "6 boutiques comparées", text: "Steam, PlayStation, Xbox, eShop, Epic et GOG au même endroit." },
+  { title: "7 boutiques comparées", text: "Steam, PlayStation, Xbox, eShop, Epic, GOG et Ubisoft au même endroit." },
   {
     title: "Aucune transaction",
     text: "100 % gratuit, aucune carte bancaire : l'achat se fait sur la boutique officielle.",

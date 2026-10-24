@@ -319,7 +319,6 @@ export default async function AdminUserPage({ params }: { params: Promise<{ id: 
                 <span className="min-w-0 flex-1 truncate text-slate-200">{w.title}</span>
                 <span className="hidden text-xs text-muted sm:inline">
                   {w.platform ? PLATFORM_LABELS[w.platform] : "Toutes plateformes"}
-                  {w.target_price !== null && ` · ≤ ${formatPrice(w.target_price, "EUR")}`}
                   {!w.notify && " · alertes coupées"}
                 </span>
                 <ActionButton

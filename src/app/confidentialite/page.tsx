@@ -82,7 +82,7 @@ export default function ConfidentialitePage() {
                     "Exécution du service",
                   ],
                   [
-                    "Wishlist : jeux suivis, plateforme, prix cible, préférence de notification",
+                    "Wishlist : jeux suivis, plateforme, préférence de notification",
                     "Afficher tes jeux et te prévenir des promos",
                     "Exécution du service",
                   ],

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { GameImage } from "@/components/GameImage";
-import { removeFromWishlist, toggleWishlistNotify, updateTargetPrice } from "@/app/wishlist/actions";
+import { removeFromWishlist, toggleWishlistNotify } from "@/app/wishlist/actions";
 import { formatPrice } from "@/lib/format";
 import type { GameArt } from "@/lib/gameArt";
 import { PLATFORM_LABELS, type Deal, type WishlistItem } from "@/lib/types";
@@ -8,7 +8,7 @@ import { StoreBadge, StoreDot } from "@/components/StoreBadge";
 
 type Props = { item: WishlistItem; deals: Deal[]; art: GameArt | null };
 
-/** Un jeu suivi : image, meilleure offre ou prix actuel, prix cible modifiable, alerte et retrait. */
+/** Un jeu suivi : image, meilleure offre ou prix actuel, statut « En promo », alerte et retrait. */
 export function WishlistItemCard({ item, deals, art }: Props) {
   const sorted = [...deals].sort((a, b) => a.sale_price - b.sale_price);
   const bestDeal = sorted[0];
@@ -96,41 +96,20 @@ export function WishlistItemCard({ item, deals, art }: Props) {
                     {art.store}
                   </a>{" "}
                   : <span className="font-semibold text-slate-200">{formatPrice(art.price, art.currency)}</span>
-                  {item.target_price !== null && art.price > item.target_price && (
-                    <>
-                      {" "}
-                      · encore {formatPrice(art.price - item.target_price, art.currency)} au-dessus de ton prix cible
-                    </>
-                  )}
                 </p>
               )}
             </div>
           )}
 
           <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3">
-            <form action={updateTargetPrice} className="flex items-center gap-2">
-              <input type="hidden" name="id" value={item.id} />
-              <label htmlFor={`target-${item.id}`} className="text-xs text-muted">
-                Prix cible
-              </label>
-              <div className="relative">
-                <input
-                  id={`target-${item.id}`}
-                  name="target_price"
-                  inputMode="decimal"
-                  defaultValue={item.target_price ?? ""}
-                  placeholder="—"
-                  className="h-8 w-20 rounded-md border border-border bg-surface-2 pr-5 pl-2 text-sm text-white outline-none focus:border-accent"
-                />
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 text-xs text-muted"
-                >
-                  €
-                </span>
-              </div>
-              <button className="h-8 rounded-md px-2 text-xs font-semibold text-accent hover:bg-accent/10">OK</button>
-            </form>
+            <span
+              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold ${
+                onSale ? "border-deal/40 bg-deal/10 text-deal" : "border-border bg-surface-2 text-muted"
+              }`}
+            >
+              <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${onSale ? "bg-deal" : "bg-muted"}`} />
+              {onSale ? "En promo" : "Pas en promo"}
+            </span>
 
             <form action={toggleWishlistNotify}>
               <input type="hidden" name="id" value={item.id} />

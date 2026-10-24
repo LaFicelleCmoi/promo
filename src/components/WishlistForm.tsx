@@ -21,7 +21,7 @@ export function WishlistForm() {
   }, [state]);
 
   return (
-    <form key={formKey} action={action} className="card grid gap-3 p-4 sm:grid-cols-[2fr_1fr_1fr_auto] sm:items-end">
+    <form key={formKey} action={action} className="card grid gap-3 p-4 sm:grid-cols-[2fr_1fr_auto] sm:items-end">
       <div>
         <label htmlFor="w-title" className="label">
           Jeu à surveiller
@@ -56,21 +56,15 @@ export function WishlistForm() {
           ))}
         </select>
       </div>
-      <div>
-        <label htmlFor="w-target" className="label">
-          Prix cible (€)
-        </label>
-        <input id="w-target" name="target_price" inputMode="decimal" placeholder="15" className="input" />
-      </div>
       <button type="submit" disabled={pending} className="btn-primary py-3 sm:py-2">
         {pending ? "Ajout…" : "Ajouter"}
       </button>
-      <label className="flex items-center gap-2 text-sm text-slate-300 sm:col-span-4">
+      <label className="flex items-center gap-2 text-sm text-slate-300 sm:col-span-3">
         <input type="checkbox" name="notify" defaultChecked className="accent-accent" />
-        M&apos;envoyer une notification quand une promo correspond
+        M&apos;envoyer une notification dès qu&apos;il passe en promo
       </label>
       {state?.error && (
-        <p role="alert" className="text-sm text-danger sm:col-span-4">
+        <p role="alert" className="text-sm text-danger sm:col-span-3">
           {state.error}
         </p>
       )}

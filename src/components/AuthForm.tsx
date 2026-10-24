@@ -7,7 +7,7 @@ import { login, signup, type AuthState } from "@/app/auth/actions";
 type Props = { mode: "login" | "signup"; next?: string; initialError?: string };
 
 const BENEFITS = [
-  { title: "Wishlist et alertes", text: "Suis tes jeux, sois prévenu dès qu'ils passent sous ton prix cible." },
+  { title: "Wishlist et alertes", text: "Suis tes jeux, sois prévenu dès qu'ils passent en promo." },
   { title: "Historique des prix", text: "Vérifie si une promo est vraiment un bon plan avant d'acheter." },
   { title: "7 boutiques comparées", text: "Steam, PlayStation, Xbox, eShop, Epic, GOG et Ubisoft au même endroit." },
   {

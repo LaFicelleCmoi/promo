@@ -121,7 +121,7 @@ export function PushToggle() {
         </h2>
         <p className="mt-0.5 text-sm text-muted">
           {status === "loading" && "Vérification de ton appareil…"}
-          {status === "on" && "Cet appareil sera prévenu quand un jeu de ta wishlist passe sous ton prix cible."}
+          {status === "on" && "Cet appareil sera prévenu quand un jeu de ta wishlist passe en promo."}
           {status === "off" &&
             "Notification système sur ton téléphone ou ton ordinateur, même site fermé. Aucun email."}
           {status === "denied" &&

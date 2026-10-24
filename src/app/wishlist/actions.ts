@@ -16,19 +16,13 @@ async function insertItem(formData: FormData): Promise<string | null> {
     .trim()
     .slice(0, 120);
   const platform = formData.get("platform");
-  const rawTarget = String(formData.get("target_price") ?? "")
-    .trim()
-    .replace(",", ".");
-  const target = rawTarget === "" ? null : Number(rawTarget);
 
   if (title.length < 2) return "Le titre doit faire au moins 2 caractères.";
-  if (target !== null && (!Number.isFinite(target) || target < 0)) return "Prix cible invalide.";
 
   const { error } = await supabase.from("wishlist").insert({
     user_id: auth.user.id,
     title,
     platform: isPlatform(platform) ? platform : null,
-    target_price: target,
     notify: formData.get("notify") !== null,
   });
 
@@ -99,17 +93,5 @@ export async function removeFromWishlist(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   const supabase = await createClient();
   await supabase.from("wishlist").delete().eq("id", id);
-  revalidatePath("/", "layout"); // rafraîchit aussi le compteur wishlist de l'en-tête
-}
-
-export async function updateTargetPrice(formData: FormData) {
-  const id = String(formData.get("id") ?? "");
-  const raw = String(formData.get("target_price") ?? "")
-    .trim()
-    .replace(",", ".");
-  const target = raw === "" ? null : Number(raw);
-  if (target !== null && (!Number.isFinite(target) || target < 0)) return;
-  const supabase = await createClient();
-  await supabase.from("wishlist").update({ target_price: target }).eq("id", id);
   revalidatePath("/", "layout"); // rafraîchit aussi le compteur wishlist de l'en-tête
 }

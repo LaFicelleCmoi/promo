@@ -52,7 +52,7 @@ async function WishlistList() {
         <p className="text-lg font-bold text-white">Ta wishlist est vide</p>
         <p className="max-w-md text-sm text-muted">
           Ajoute un jeu avec le formulaire ci-dessus, ou clique sur le cœur d&apos;une promo : tu seras prévenu dès
-          qu&apos;il passe sous ton prix cible.
+          qu&apos;il passe en promo.
         </p>
         <Link href="/" className="btn-primary mt-2">
           Découvrir les promos
@@ -134,8 +134,8 @@ export default async function WishlistPage() {
       <div>
         <h1 className="text-2xl font-bold sm:text-3xl">Ma wishlist</h1>
         <p className="mt-1 max-w-3xl text-sm text-muted">
-          Ajoute les jeux que tu attends : dès qu&apos;une promo correspond (et passe sous ton prix cible), elle
-          apparaît ici et tu reçois une notification.
+          Ajoute les jeux que tu attends : dès qu&apos;un jeu passe en promo, il apparaît ici en tête de liste et tu
+          reçois une notification.
         </p>
       </div>
 

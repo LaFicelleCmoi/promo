@@ -1,7 +1,7 @@
 # Promo Tracker 🎮
 
 Tracker de promos jeux vidéo **toutes plateformes** (PC, PlayStation, Xbox, Nintendo Switch, mobile) avec
-connexion / inscription, wishlist et prix cibles.
+connexion / inscription, wishlist et alertes de promo.
 
 ## Stack
 
@@ -67,7 +67,7 @@ neutre : la couleur ne porte jamais seule l'information.
 
 - Liste des promos avec filtres : plateforme, boutique, recherche, réduction minimale, prix max, gratuits, tri.
 - Inscription (pseudo, email, mot de passe) avec confirmation par email, connexion, déconnexion.
-- Wishlist : jeux à surveiller, plateforme et prix cible optionnels ; les promos correspondantes s'affichent.
+- Wishlist : jeux à surveiller (plateforme optionnelle) ; ceux en promo s'affichent en tête avec un statut « En promo ».
 - Ajout d'une promo à la wishlist en un clic, partage de promos communautaires (suppression par l'auteur).
 - Notifications système quand une promo correspond à un jeu de la wishlist, activables jeu par jeu.
 - Suivi quotidien des prix sur Steam, PlayStation, Xbox, eShop, Epic, GOG et Ubisoft Connect, avec historique et plus bas prix.

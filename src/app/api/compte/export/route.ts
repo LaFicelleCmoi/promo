@@ -9,7 +9,7 @@ export async function GET() {
   if (!user) return NextResponse.json({ error: "Non connecté" }, { status: 401 });
 
   const [{ data: wishlist }, { data: deals }] = await Promise.all([
-    supabase.from("wishlist").select("title, platform, target_price, notify, created_at").order("created_at"),
+    supabase.from("wishlist").select("title, platform, notify, created_at").order("created_at"),
     supabase
       .from("deals")
       .select("title, platform, store, url, sale_price, normal_price, currency, ends_at, created_at")
